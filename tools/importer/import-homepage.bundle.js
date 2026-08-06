@@ -154,10 +154,28 @@ var CustomImportScript = (() => {
     element.replaceWith(block);
   }
 
-  // tools/importer/transformers/wknd-cleanup.js
+  // tools/importer/transformers/wknd-buttons.js
   var TransformHook = { beforeTransform: "beforeTransform", afterTransform: "afterTransform" };
+  function wrapButtons(element, containerSelector, wrapperTag) {
+    element.querySelectorAll(containerSelector).forEach((container) => {
+      const link = container.querySelector("a");
+      if (!link || link.closest("strong, em")) return;
+      const wrapper = element.ownerDocument.createElement(wrapperTag);
+      link.parentNode.insertBefore(wrapper, link);
+      wrapper.appendChild(link);
+    });
+  }
   function transform(hookName, element, payload) {
-    if (hookName === TransformHook.afterTransform) {
+    if (hookName === TransformHook.beforeTransform) {
+      wrapButtons(element, ".cmp-button--primary", "strong");
+      wrapButtons(element, ".cmp-button--secondary", "em");
+    }
+  }
+
+  // tools/importer/transformers/wknd-cleanup.js
+  var TransformHook2 = { beforeTransform: "beforeTransform", afterTransform: "afterTransform" };
+  function transform2(hookName, element, payload) {
+    if (hookName === TransformHook2.afterTransform) {
       WebImporter.DOMUtils.remove(element, [
         // Global header experience fragment (logo, main nav, language nav, search)
         // cleaned.html line 5: <header class="experiencefragment cmp-experiencefragment--header ...">
@@ -189,7 +207,8 @@ var CustomImportScript = (() => {
     "hero-overlay": parse4
   };
   var transformers = [
-    transform
+    transform,
+    transform2
   ];
   var PAGE_TEMPLATE = {
     name: "homepage",

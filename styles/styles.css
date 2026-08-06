@@ -297,6 +297,30 @@ main a.button:any-link:hover {
   color: var(--link-hover-color);
 }
 
+/* Primary buttons (e.g. "All Articles", "All Trips") render as the WKND
+   yellow pill, matching the source's cmp-button--primary list CTAs. This
+   overrides the inline text-link reset above for primary/secondary buttons. */
+main a.button.primary:any-link,
+main a.button.secondary:any-link {
+  display: inline-block;
+  margin: 12px 0;
+  padding: 14px 35px;
+  border: none;
+  border-radius: 0;
+  background-color: rgb(255 234 0);
+  color: rgb(32 32 32);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+main a.button.primary:any-link:hover,
+main a.button.secondary:any-link:hover {
+  background-color: rgb(230 211 0);
+  color: rgb(32 32 32);
+}
+
 main img {
   max-width: 100%;
   width: auto;
