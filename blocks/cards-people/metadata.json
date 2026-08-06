@@ -1,0 +1,6 @@
+{
+  "baseBlock": "cards",
+  "variantName": "cards-people",
+  "description": "People/contributor card grid: headshot image, name (h3), role (h5), and social links. Used on the About Us contributors page.",
+  "createdFor": "landing-overview / about-us contributors"
+}

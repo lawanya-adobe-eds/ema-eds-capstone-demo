@@ -38,6 +38,156 @@
           ]
         }
       ]
+    },
+    {
+      "name": "adventure-detail",
+      "urls": [
+        "https://wknd.site/us/en/adventures/bali-surf-camp.html",
+        "https://wknd.site/us/en/adventures/beervana-portland.html",
+        "https://wknd.site/us/en/adventures/climbing-new-zealand.html",
+        "https://wknd.site/us/en/adventures/colorado-rock-climbing.html",
+        "https://wknd.site/us/en/adventures/cycling-southern-utah.html",
+        "https://wknd.site/us/en/adventures/cycling-tuscany.html",
+        "https://wknd.site/us/en/adventures/downhill-skiing-wyoming.html",
+        "https://wknd.site/us/en/adventures/gastronomic-marais-tour.html",
+        "https://wknd.site/us/en/adventures/napa-wine-tasting.html",
+        "https://wknd.site/us/en/adventures/riverside-camping-australia.html",
+        "https://wknd.site/us/en/adventures/ski-touring-mont-blanc.html",
+        "https://wknd.site/us/en/adventures/surf-camp-costa-rica.html",
+        "https://wknd.site/us/en/adventures/tahoe-skiing.html",
+        "https://wknd.site/us/en/adventures/west-coast-cycling.html",
+        "https://wknd.site/us/en/adventures/whistler-mountain-biking.html",
+        "https://wknd.site/us/en/adventures/yosemite-backpacking.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/adventures/bali-surf-camp.html",
+      "coverageGaps": [],
+      "description": "WKND adventure detail page: breadcrumb trail, image gallery carousel, title + specs + share (default content), and tabs (overview/itinerary/what to bring).",
+      "blocks": [
+        {
+          "name": "breadcrumb",
+          "instances": [
+            "div.breadcrumb.cmp-breadcrumb--fixed",
+            "div.breadcrumb"
+          ]
+        },
+        {
+          "name": "carousel-gallery",
+          "instances": [
+            "div.carousel.cmp-carousel--mini"
+          ]
+        },
+        {
+          "name": "tabs-adventure",
+          "instances": [
+            "div.tabs.panelcontainer",
+            "div.tabs"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "magazine-article",
+      "urls": [
+        "https://wknd.site/us/en/magazine/arctic-surfing.html",
+        "https://wknd.site/us/en/magazine/guide-la-skateparks.html",
+        "https://wknd.site/us/en/magazine/san-diego-surf.html",
+        "https://wknd.site/us/en/magazine/ski-touring.html",
+        "https://wknd.site/us/en/magazine/western-australia.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/magazine/arctic-surfing.html",
+      "coverageGaps": [],
+      "description": "WKND magazine article: lead image, breadcrumb, long-form editorial body (title, byline, headings, paragraphs, images) with a pull-quote block, author byline, and related-stories sidebar.",
+      "blocks": [
+        {
+          "name": "breadcrumb",
+          "instances": [
+            "div.breadcrumb.cmp-breadcrumb--fixed",
+            "div.breadcrumb"
+          ]
+        },
+        {
+          "name": "quote-editorial",
+          "instances": [
+            "blockquote",
+            "div.cmp-quote",
+            "div.quote"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "adventures-listing",
+      "urls": [
+        "https://wknd.site/us/en/adventures.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/adventures.html",
+      "coverageGaps": [],
+      "description": "WKND adventures listing: Adventures title, hero teaser (image + text card), and Current Adventures filter tabs (All/Climbing/Cycling/Skiing/Surfing/Travel) each containing a 4-up adventure card grid.",
+      "blocks": [
+        {
+          "name": "hero-overlay",
+          "instances": [
+            "div.teaser.cmp-teaser--hero.cmp-teaser--imagebottom",
+            "div.teaser.cmp-teaser--hero"
+          ]
+        },
+        {
+          "name": "tabs-adventure",
+          "instances": [
+            "div.tabs.panelcontainer",
+            "div.tabs"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "faq",
+      "urls": [
+        "https://wknd.site/us/en/faqs.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/faqs.html",
+      "coverageGaps": [],
+      "description": "WKND FAQ page: FAQs header (title + image + intro), an accordion of 7 expandable Q&A items, and a Need more help contact block.",
+      "blocks": [
+        {
+          "name": "accordion-faq",
+          "instances": [
+            "div.accordion.cmp-accordion",
+            "div.accordion"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "landing-overview",
+      "urls": [
+        "https://wknd.site/us/en/magazine.html",
+        "https://wknd.site/us/en/about-us.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/magazine.html",
+      "coverageGaps": [],
+      "description": "WKND landing/overview page: title + featured teaser (columns), a grid of article cards, and (magazine) a members-only section with secure teaser cards.",
+      "blocks": [
+        {
+          "name": "columns-featured",
+          "instances": [
+            "div.teaser.cmp-teaser--featured"
+          ]
+        },
+        {
+          "name": "cards-teaser",
+          "instances": [
+            "div.image-list.list",
+            "div.teaser.cmp-teaser--secure"
+          ]
+        },
+        {
+          "name": "cards-people",
+          "instances": [
+            "section.cmp-experience-fragment--contributor"
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,36 @@
+/* quote-editorial
+ * Editorial pull-quote, matched to the WKND source (arctic-surfing.html).
+ * Decorated DOM: .quote-editorial.block > blockquote > .quote-editorial-quotation > p
+ *
+ * Source computed styles (identical at mobile 375 and desktop 1280):
+ *   font: Source Sans Pro / 18px / weight 400 / normal (NOT italic)
+ *   line-height: 27px (1.5), color: rgb(32 32 32), text-align: left
+ *   margin: 18px 40px  (18px top/bottom, 40px left/right indent from text column)
+ *   no border, no background, no box-shadow, no border-radius
+ *   quotation marks are literal characters in the content, NOT generated
+ */
+
+.quote-editorial blockquote {
+  margin: 18px 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m); /* 18px */
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5; /* 27px at 18px */
+  text-align: left;
+}
+
+/* Quotation cell: inherits the blockquote typography (no size bump on source).
+   Zero the paragraph margins so the quote sits tight, matching the source's
+   single-block metrics rather than adding default paragraph spacing. */
+.quote-editorial blockquote .quote-editorial-quotation p {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
