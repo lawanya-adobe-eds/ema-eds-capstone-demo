@@ -1,0 +1,121 @@
+/* Block: hero-overlay
+   Full-bleed image with a white text card that overlaps the image bottom
+   on desktop (WKND "cmp-teaser--imagebottom" variant). Values extracted from
+   source computed styles. */
+
+/* Break the block out of the section's centered/padded container so the
+   image can render full-bleed. */
+.hero-overlay-container .hero-overlay-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.hero-overlay {
+  padding: 0;
+  color: var(--text-color);
+}
+
+/* Row 1 = image cell, Row 2 = text cell */
+.hero-overlay > div {
+  margin: 0;
+}
+
+/* --- Image (full width) --- */
+.hero-overlay > div:first-child picture {
+  display: block;
+}
+
+.hero-overlay > div:first-child img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+/* --- Text card --- */
+.hero-overlay > div:last-child > div {
+  box-sizing: border-box;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 14px 24px;
+  background-color: var(--background-color);
+  text-align: left;
+}
+
+.hero-overlay h2 {
+  margin: 18px 0 0;
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-xxl); /* 36px */
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-color);
+}
+
+.hero-overlay p {
+  margin: 0.8em 0 0.25em;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m); /* 18px */
+  line-height: 1.75;
+  color: var(--text-color);
+}
+
+/* --- CTA button (yellow, uppercase). Override the global button-stripping
+   rules regardless of whether EDS decorates the link as a .button. --- */
+.hero-overlay .button-container,
+main .hero-overlay .button-container {
+  display: block;
+  margin-top: 12px;
+}
+
+.hero-overlay a:any-link,
+main .hero-overlay a:any-link,
+main .hero-overlay a.button:any-link {
+  display: inline-block;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  padding: 14px 35px;
+  background-color: rgb(255 234 0);
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: normal;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hero-overlay a:any-link:hover,
+main .hero-overlay a:any-link:hover,
+main .hero-overlay a.button:any-link:hover {
+  background-color: rgb(230 211 0);
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+/* --- Fallback when the block has no image --- */
+.hero-overlay.no-image > div:last-child > div {
+  padding-top: 24px;
+}
+
+/* --- Desktop: wider image + overlapping text card --- */
+@media (width >= 900px) {
+  .hero-overlay > div:first-child img {
+    aspect-ratio: 2 / 1;
+  }
+
+  .hero-overlay > div:last-child > div {
+    position: relative;
+    z-index: 1;
+    margin-top: -180px;
+    padding: 0 28px 28px;
+  }
+
+  .hero-overlay.no-image > div:last-child > div {
+    margin-top: 0;
+    padding-top: 40px;
+  }
+}
