@@ -72,5 +72,29 @@ export default async function decorate(block) {
     activate(btn, block.querySelector(`#${btn.getAttribute('aria-controls')}`));
   });
 
+  // Enhance the adventures-listing variant: there each tab panel is a <ul> of
+  // adventure cards (image + title + description). The source renders the title
+  // as an uppercase dark label and truncates the description to a single grey
+  // ellipsised line so every card is the same height. The description arrives as
+  // a bare text node, so wrap it (and tag the title link) to give CSS a hook.
+  // Prose panels on adventure-detail pages have no card images and are skipped.
+  block.querySelectorAll('.tabs-adventure-panel li').forEach((li) => {
+    if (!li.querySelector('picture') || li.dataset.cardDecorated) return;
+    const textP = [...li.querySelectorAll(':scope > p')]
+      .find((p) => !p.querySelector('picture'));
+    if (textP) {
+      const titleLink = textP.querySelector(':scope > a');
+      if (titleLink) titleLink.classList.add('tabs-adventure-card-title');
+      const desc = document.createElement('span');
+      desc.className = 'tabs-adventure-card-desc';
+      let node = titleLink ? titleLink.nextSibling : textP.firstChild;
+      const rest = [];
+      while (node) { rest.push(node); node = node.nextSibling; }
+      rest.forEach((n) => desc.append(n));
+      if (desc.textContent.trim()) textP.append(desc);
+    }
+    li.dataset.cardDecorated = 'true';
+  });
+
   block.prepend(tablist);
 }

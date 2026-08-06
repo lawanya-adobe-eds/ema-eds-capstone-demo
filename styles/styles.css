@@ -21,9 +21,12 @@
   --link-color: rgb(0 69 255);
   --link-hover-color: rgb(0 55 204);
 
-  /* fonts — Asar (headings) / Source Sans Pro (body), from brand.css */
-  --body-font-family: var(--body-font-family, "Source Sans Pro", "Helvetica Neue", helvetica, arial, sans-serif);
-  --heading-font-family: var(--heading-font-family, asar, georgia, "Times New Roman", times, serif);
+  /* fonts — Asar (headings) / Source Sans Pro (body).
+     Set directly here (do NOT self-reference via var(); brand.css also defines
+     these and is imported first, but a self-referential var() resolves to an
+     invalid/empty value per the CSS spec). */
+  --body-font-family: "Source Sans Pro", "Helvetica Neue", helvetica, arial, sans-serif;
+  --heading-font-family: asar, georgia, "Times New Roman", times, serif;
 
   /* body sizes */
   --body-font-size-m: 18px;

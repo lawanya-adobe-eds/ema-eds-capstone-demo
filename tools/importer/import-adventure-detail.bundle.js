@@ -42,7 +42,7 @@ var CustomImportScript = (() => {
   });
 
   // tools/importer/parsers/breadcrumb.js
-  function parse(element, { document }) {
+  function parse(element, { document: document2 }) {
     let items = Array.from(element.querySelectorAll(".cmp-breadcrumb__item"));
     if (items.length === 0) {
       items = Array.from(element.querySelectorAll("ol li, nav li"));
@@ -51,7 +51,7 @@ var CustomImportScript = (() => {
     items.forEach((item) => {
       const link = item.querySelector("a[href]");
       if (link) {
-        const anchor = document.createElement("a");
+        const anchor = document2.createElement("a");
         anchor.href = link.getAttribute("href") || "";
         anchor.textContent = link.textContent.trim();
         if (anchor.textContent) cells.push([anchor]);
@@ -64,12 +64,12 @@ var CustomImportScript = (() => {
       element.replaceWith(...element.childNodes);
       return;
     }
-    const block = WebImporter.Blocks.createBlock(document, { name: "breadcrumb", cells });
+    const block = WebImporter.Blocks.createBlock(document2, { name: "breadcrumb", cells });
     element.replaceWith(block);
   }
 
   // tools/importer/parsers/carousel-gallery.js
-  function parse2(element, { document }) {
+  function parse2(element, { document: document2 }) {
     const slides = Array.from(element.querySelectorAll(".cmp-carousel__item"));
     const cells = [];
     slides.forEach((slide) => {
@@ -82,12 +82,12 @@ var CustomImportScript = (() => {
       element.replaceWith(...element.childNodes);
       return;
     }
-    const block = WebImporter.Blocks.createBlock(document, { name: "carousel-gallery", cells });
+    const block = WebImporter.Blocks.createBlock(document2, { name: "carousel-gallery", cells });
     element.replaceWith(block);
   }
 
   // tools/importer/parsers/tabs-adventure.js
-  function parse3(element, { document }) {
+  function parse3(element, { document: document2 }) {
     const labels = Array.from(element.querySelectorAll(".cmp-tabs__tablist .cmp-tabs__tab, ol.cmp-tabs__tablist > li"));
     const panels = Array.from(element.querySelectorAll(".cmp-tabs__tabpanel"));
     const cells = [];
@@ -112,7 +112,7 @@ var CustomImportScript = (() => {
       element.replaceWith(...element.childNodes);
       return;
     }
-    const block = WebImporter.Blocks.createBlock(document, { name: "tabs-adventure", cells });
+    const block = WebImporter.Blocks.createBlock(document2, { name: "tabs-adventure", cells });
     element.replaceWith(block);
   }
 
@@ -143,6 +143,55 @@ var CustomImportScript = (() => {
     }
   }
 
+  // tools/importer/transformers/wknd-specs.js
+  var TransformHook2 = { beforeTransform: "beforeTransform", afterTransform: "afterTransform" };
+  var SPEC_LIST_SEL = "dl.cmp-contentfragment__elements";
+  var PAIR_SEL = ".cmp-contentfragment__element";
+  var LABEL_SEL = "dt.cmp-contentfragment__element-title, dt, .cmp-contentfragment__element-title";
+  var VALUE_SEL = "dd.cmp-contentfragment__element-value, dd, .cmp-contentfragment__element-value";
+  var clean = (node) => (node ? node.textContent : "").replace(/\s+/g, " ").trim();
+  function buildRows(dl) {
+    const rows = [];
+    const pairs = dl.querySelectorAll(PAIR_SEL);
+    if (pairs.length) {
+      pairs.forEach((pair) => {
+        const label = clean(pair.querySelector(LABEL_SEL));
+        const value = clean(pair.querySelector(VALUE_SEL));
+        if (label || value) rows.push([label, value]);
+      });
+      return rows;
+    }
+    const terms = Array.from(dl.querySelectorAll("dt"));
+    terms.forEach((dt) => {
+      let dd = dt.nextElementSibling;
+      while (dd && dd.tagName !== "DD") dd = dd.nextElementSibling;
+      const label = clean(dt);
+      const value = clean(dd);
+      if (label || value) rows.push([label, value]);
+    });
+    return rows;
+  }
+  function transform2(hookName, element, payload) {
+    if (hookName === TransformHook2.beforeTransform) {
+      element.querySelectorAll(SPEC_LIST_SEL).forEach((dl) => {
+        const cells = buildRows(dl);
+        if (!cells.length) return;
+        const block = WebImporter.Blocks.createBlock(document, { name: "specs", cells });
+        const article = dl.closest("article.cmp-contentfragment");
+        if (article) {
+          article.replaceWith(block);
+          return;
+        }
+        const wrapper = dl.parentElement;
+        if (wrapper) {
+          const dupTitle = wrapper.querySelector("h3.cmp-contentfragment__title, .cmp-contentfragment__title");
+          if (dupTitle) dupTitle.remove();
+        }
+        dl.replaceWith(block);
+      });
+    }
+  }
+
   // tools/importer/import-adventure-detail.js
   var parsers = {
     breadcrumb: parse,
@@ -150,7 +199,8 @@ var CustomImportScript = (() => {
     "tabs-adventure": parse3
   };
   var transformers = [
-    transform
+    transform,
+    transform2
   ];
   var PAGE_TEMPLATE = {
     name: "adventure-detail",
@@ -180,12 +230,12 @@ var CustomImportScript = (() => {
       }
     });
   }
-  function findBlocksOnPage(document, template) {
+  function findBlocksOnPage(document2, template) {
     const pageBlocks = [];
     const seen = /* @__PURE__ */ new Set();
     template.blocks.forEach((blockDef) => {
       blockDef.instances.forEach((selector) => {
-        document.querySelectorAll(selector).forEach((element) => {
+        document2.querySelectorAll(selector).forEach((element) => {
           if (seen.has(element)) return;
           seen.add(element);
           pageBlocks.push({ name: blockDef.name, selector, element });
@@ -197,16 +247,16 @@ var CustomImportScript = (() => {
   }
   var import_adventure_detail_default = {
     transform: (payload) => {
-      const { document, url, params } = payload;
-      const main = document.body;
+      const { document: document2, url, params } = payload;
+      const main = document2.body;
       executeTransformers("beforeTransform", main, payload);
-      const pageBlocks = findBlocksOnPage(document, PAGE_TEMPLATE);
+      const pageBlocks = findBlocksOnPage(document2, PAGE_TEMPLATE);
       pageBlocks.forEach((block) => {
         if (!block.element.parentNode) return;
         const parser = parsers[block.name];
         if (parser) {
           try {
-            parser(block.element, { document, url, params });
+            parser(block.element, { document: document2, url, params });
           } catch (e) {
             console.error(`Failed to parse ${block.name} (${block.selector}):`, e);
           }
@@ -215,10 +265,10 @@ var CustomImportScript = (() => {
         }
       });
       executeTransformers("afterTransform", main, payload);
-      const hr = document.createElement("hr");
+      const hr = document2.createElement("hr");
       main.appendChild(hr);
-      WebImporter.rules.createMetadata(main, document);
-      WebImporter.rules.transformBackgroundImages(main, document);
+      WebImporter.rules.createMetadata(main, document2);
+      WebImporter.rules.transformBackgroundImages(main, document2);
       WebImporter.rules.adjustImageUrls(main, url, params.originalURL);
       const path = WebImporter.FileUtils.sanitizePath(
         new URL(params.originalURL).pathname.replace(/\/$/, "").replace(/\.html$/, "")
@@ -227,7 +277,7 @@ var CustomImportScript = (() => {
         element: main,
         path,
         report: {
-          title: document.title,
+          title: document2.title,
           template: PAGE_TEMPLATE.name,
           blocks: pageBlocks.map((b) => b.name)
         }

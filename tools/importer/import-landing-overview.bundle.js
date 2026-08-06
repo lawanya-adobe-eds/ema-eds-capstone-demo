@@ -190,10 +190,77 @@ var CustomImportScript = (() => {
     element.replaceWith(block);
   }
 
-  // tools/importer/transformers/wknd-cleanup.js
+  // tools/importer/transformers/wknd-members-teasers.js
   var TransformHook = { beforeTransform: "beforeTransform", afterTransform: "afterTransform" };
+  function getValidHref(teaser) {
+    const anchor = teaser.querySelector(
+      ".cmp-teaser__title a[href], .cmp-teaser__action-container a[href], a[href]"
+    );
+    if (!anchor) return null;
+    const href = (anchor.getAttribute("href") || "").trim();
+    if (!href || href === "#" || href.toLowerCase().startsWith("javascript:")) return null;
+    return href;
+  }
+  function buildCardRow(teaser, doc) {
+    const image = teaser.querySelector(".cmp-teaser__image img, .cmp-image img, img");
+    const textCell = [];
+    const titleEl = teaser.querySelector(".cmp-teaser__title");
+    const titleText = titleEl ? titleEl.textContent.trim() : "";
+    if (titleText) {
+      const heading = doc.createElement("h3");
+      const href = getValidHref(teaser);
+      if (href) {
+        const link = doc.createElement("a");
+        link.href = href;
+        link.textContent = titleText;
+        heading.append(link);
+      } else {
+        heading.textContent = titleText;
+      }
+      textCell.push(heading);
+    }
+    const descEl = teaser.querySelector(".cmp-teaser__description");
+    if (descEl) {
+      const innerP = descEl.querySelector("p");
+      if (innerP && innerP.textContent.trim()) {
+        textCell.push(innerP);
+      } else {
+        const descText = descEl.textContent.trim();
+        if (descText) {
+          const p = doc.createElement("p");
+          p.textContent = descText;
+          textCell.push(p);
+        }
+      }
+    }
+    if (!image && textCell.length === 0) return null;
+    return [image || "", textCell.length > 0 ? textCell : ""];
+  }
   function transform(hookName, element, payload) {
-    if (hookName === TransformHook.afterTransform) {
+    if (hookName === TransformHook.beforeTransform) {
+      const teasers = Array.from(element.querySelectorAll("div.teaser.cmp-teaser--secure"));
+      if (teasers.length === 0) return;
+      const doc = element.ownerDocument || payload && payload.document;
+      if (!doc) return;
+      const cells = [];
+      teasers.forEach((teaser) => {
+        const row = buildCardRow(teaser, doc);
+        if (row) cells.push(row);
+      });
+      if (cells.length === 0) return;
+      const block = WebImporter.Blocks.createBlock(doc, { name: "cards-teaser", cells });
+      const first = teasers[0];
+      if (first.parentNode) {
+        first.parentNode.insertBefore(block, first);
+      }
+      teasers.forEach((teaser) => teaser.remove());
+    }
+  }
+
+  // tools/importer/transformers/wknd-cleanup.js
+  var TransformHook2 = { beforeTransform: "beforeTransform", afterTransform: "afterTransform" };
+  function transform2(hookName, element, payload) {
+    if (hookName === TransformHook2.afterTransform) {
       WebImporter.DOMUtils.remove(element, [
         // Global header experience fragment (logo, main nav, language nav, search)
         // cleaned.html line 5: <header class="experiencefragment cmp-experiencefragment--header ...">
@@ -224,7 +291,8 @@ var CustomImportScript = (() => {
     "cards-people": parse3
   };
   var transformers = [
-    transform
+    transform,
+    transform2
   ];
   var PAGE_TEMPLATE = {
     name: "landing-overview",
@@ -236,7 +304,7 @@ var CustomImportScript = (() => {
       },
       {
         name: "cards-teaser",
-        instances: ["div.image-list.list", "div.teaser.cmp-teaser--secure"]
+        instances: ["div.image-list.list"]
       },
       {
         name: "cards-people",
