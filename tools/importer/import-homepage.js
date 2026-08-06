@@ -8,6 +8,7 @@ import cardsTeaserParser from './parsers/cards-teaser.js';
 import heroOverlayParser from './parsers/hero-overlay.js';
 
 // TRANSFORMER IMPORTS
+import wkndButtonsTransformer from './transformers/wknd-buttons.js';
 import wkndCleanupTransformer from './transformers/wknd-cleanup.js';
 
 // PARSER REGISTRY
@@ -20,6 +21,7 @@ const parsers = {
 
 // TRANSFORMER REGISTRY
 const transformers = [
+  wkndButtonsTransformer,
   wkndCleanupTransformer,
 ];
 

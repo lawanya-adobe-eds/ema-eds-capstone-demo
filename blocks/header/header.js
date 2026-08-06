@@ -32,6 +32,84 @@ function toggleMenu(nav, forceExpanded = null) {
 }
 
 /**
+ * Resolve the query-index path for both local dev (/content) and production.
+ */
+function getIndexPath() {
+  const base = window.location.pathname.startsWith('/content/') ? '/content/us/en' : '/us/en';
+  return `${base}/query-index.json`;
+}
+
+// Cache the fetched index across keystrokes so we only load it once.
+let indexPromise = null;
+async function loadIndex() {
+  if (!indexPromise) {
+    indexPromise = fetch(getIndexPath())
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((json) => json.data || [])
+      .catch(() => []);
+  }
+  return indexPromise;
+}
+
+/**
+ * Render matching results into the dropdown.
+ */
+function renderResults(matches, results) {
+  results.textContent = '';
+  if (!matches.length) {
+    results.hidden = true;
+    return;
+  }
+  matches.slice(0, 8).forEach((item) => {
+    const li = document.createElement('li');
+    li.setAttribute('role', 'option');
+    const link = document.createElement('a');
+    // Local dev serves under /content; strip nothing — the index paths are
+    // already site-relative and work in both environments once prefixed.
+    const prefix = window.location.pathname.startsWith('/content/') ? '/content' : '';
+    link.href = `${prefix}${item.path}`;
+    link.textContent = item.title || item.path;
+    li.append(link);
+    results.append(li);
+  });
+  results.hidden = false;
+}
+
+/**
+ * Wire up live-suggest search: filter the query index by title/description as
+ * the user types, show a results dropdown, and navigate on submit/selection.
+ */
+function setupSearch(input, results, form) {
+  const search = (term) => {
+    const q = term.trim().toLowerCase();
+    if (q.length < 2) {
+      renderResults([], results);
+      return;
+    }
+    loadIndex().then((data) => {
+      const matches = data.filter((item) => {
+        const hay = `${item.title || ''} ${item.description || ''}`.toLowerCase();
+        return hay.includes(q);
+      });
+      renderResults(matches, results);
+    });
+  };
+
+  input.addEventListener('input', () => search(input.value));
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const first = results.querySelector('a');
+    if (first) window.location.href = first.href;
+  });
+  // Hide the dropdown when focus leaves the search area.
+  document.addEventListener('click', (e) => {
+    if (!form.parentElement.contains(e.target)) {
+      results.hidden = true;
+    }
+  });
+}
+
+/**
  * loads and decorates the header, mainly the nav
  * @param {Element} block The header block element
  */
@@ -138,14 +216,14 @@ export default async function decorate(block) {
     navTools.remove();
   }
 
-  // --- Build inline search form (form controls live in JS, not the fragment).
-  // Appended to nav (a sibling of nav-sections) so it stays visible in the bar
-  // on mobile while the nav links collapse into the hamburger drawer. ---
+  // --- Build inline search form with live-suggest (form controls live in JS,
+  // not the fragment). Appended to nav (a sibling of nav-sections) so it stays
+  // visible in the bar on mobile while the nav links collapse into the drawer.
+  // Results are matched client-side against the published query index. ---
   const search = document.createElement('div');
   search.className = 'nav-search';
   const form = document.createElement('form');
   form.setAttribute('role', 'search');
-  form.action = '/us/en/search.html';
   const icon = document.createElement('span');
   icon.className = 'nav-search-icon';
   icon.setAttribute('aria-hidden', 'true');
@@ -154,9 +232,15 @@ export default async function decorate(block) {
   input.name = 'q';
   input.placeholder = 'Search';
   input.setAttribute('aria-label', 'Search');
+  input.setAttribute('autocomplete', 'off');
+  const results = document.createElement('ul');
+  results.className = 'nav-search-results';
+  results.setAttribute('role', 'listbox');
+  results.hidden = true;
   form.append(icon, input);
-  search.append(form);
+  search.append(form, results);
   nav.append(search);
+  setupSearch(input, results, form);
 
   // --- Hamburger for mobile ---
   const hamburger = document.createElement('div');

@@ -9,7 +9,31 @@ footer {
 footer .footer {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px 24px 24px;
+  padding: 24px;
+}
+
+/* Desktop: horizontal band matching the source — logo | nav | Follow Us+social
+   on one row, legal text full-width below. */
+@media (width >= 900px) {
+  footer .footer-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "brand nav social"
+      "legal legal legal";
+    align-items: start;
+    column-gap: 48px;
+  }
+
+  footer .footer-brand { grid-area: brand; }
+
+  footer .footer-nav {
+    grid-area: nav;
+    align-self: center;
+  }
+
+  footer .footer-social { grid-area: social; }
+  footer .footer-legal { grid-area: legal; }
 }
 
 footer .footer a {
@@ -35,18 +59,23 @@ footer .footer-brand img {
   height: auto;
 }
 
-/* Footer nav */
+/* Footer nav — horizontal row of uppercase links with clear spacing. */
 footer .footer-nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
+  gap: 12px 24px;
   margin: 0 0 24px;
   padding: 0;
   list-style: none;
 }
 
+footer .footer-nav li {
+  margin: 0;
+}
+
 /* stylelint-disable-next-line no-descending-specificity */
 footer .footer-nav a {
+  display: inline-block;
   font-size: 14px;
   text-transform: uppercase;
 }
@@ -62,7 +91,7 @@ footer .footer-social h4 {
 
 footer .footer-social ul {
   display: flex;
-  gap: 16px;
+  gap: 0;
   margin: 0 0 24px;
   padding: 0;
   list-style: none;
@@ -72,24 +101,25 @@ footer .footer-social li {
   margin: 0;
 }
 
+/* Match source: 48×48 light-grey squares, edge-to-edge, dark glyph. */
 footer .footer-social-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #fff;
-  transition: opacity 0.2s ease;
+  width: 48px;
+  height: 48px;
+  border-radius: 0;
+  background-color: rgb(235 235 235);
+  transition: background-color 0.2s ease;
 }
 
 footer .footer-social-icon:hover {
-  opacity: 0.75;
+  background-color: #fff;
 }
 
 footer .footer-social-icon svg {
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
   fill: rgb(32 32 32);
 }
 
