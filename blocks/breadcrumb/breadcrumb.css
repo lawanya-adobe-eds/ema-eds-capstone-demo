@@ -1,0 +1,63 @@
+/* Breadcrumb block -- visual design migrated from WKND source.
+   Source: https://wknd.site/us/en/adventures/bali-surf-camp.html (.cmp-breadcrumb)
+   Values extracted from computed styles + source stylesheet rules. */
+
+.breadcrumb nav {
+  width: 100%;
+}
+
+/* Inline-flow list matching source (.cmp-breadcrumb__list: display block, items inline-block). */
+.breadcrumb .breadcrumb-list {
+  margin: 0;
+  padding: 0 12px 0 0;
+  list-style: none;
+  font-size: var(--body-font-size-xs); /* 14px */
+  line-height: 1.5; /* 21px at 14px */
+}
+
+/* Each crumb: inline-block, padding 10px 5px, uppercase (source .cmp-breadcrumb__item). */
+.breadcrumb .breadcrumb-item {
+  display: inline-block;
+  padding: 10px 5px;
+  color: var(--text-color); /* rgb(32 32 32) */
+  text-transform: uppercase;
+  vertical-align: top;
+}
+
+.breadcrumb .breadcrumb-item:first-child {
+  padding-left: 0;
+}
+
+/* Separator: yellow right-pointing triangle before every crumb except the first.
+   Source renders a wknd-icon-font glyph in --brandPrimary (#ffea00); reproduced
+   here as a CSS border triangle so it works without the icon font. */
+.breadcrumb .breadcrumb-item:not(:first-child)::before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-right: 5px;
+  vertical-align: middle;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid #ffea00;
+}
+
+/* Linked crumb (source .cmp-breadcrumb__item-link): dark text, semibold, no underline. */
+.breadcrumb .breadcrumb-link {
+  color: var(--text-color); /* rgb(32 32 32) -- not the global link blue */
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.breadcrumb .breadcrumb-link:hover,
+.breadcrumb .breadcrumb-link:focus-visible {
+  color: var(--text-color);
+  text-decoration: underline;
+}
+
+/* Current page crumb (source active <span>): regular weight, dark text. */
+.breadcrumb .breadcrumb-item-active {
+  color: var(--text-color);
+  font-weight: 400;
+}

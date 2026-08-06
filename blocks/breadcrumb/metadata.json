@@ -1,0 +1,40 @@
+{
+  "variantName": "breadcrumb",
+  "baseBlock": "breadcrumb",
+  "version": "1.0.0",
+  "created": "2026-08-06T12:34:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://wknd.site/us/en/adventures/bali-surf-camp.html",
+    "originPage": "WKND adventure detail page (Bali Surf Camp)",
+    "blockPosition": "top"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "navigation-trail",
+    "imagePattern": "noimg"
+  },
+  "contentPattern": {
+    "structure": "ordered list of crumbs; links for ancestors + plain-text active current page",
+    "buttonCount": 0,
+    "imageCount": 0,
+    "crumbCount": 2
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "detail/leaf pages that need a navigation trail back up the hierarchy",
+      "adventure detail, magazine article, and other deep pages",
+      "any page that shows 'Parent > Current' breadcrumb navigation"
+    ],
+    "notSuitableFor": [
+      "top-level landing pages with no parent hierarchy",
+      "primary site navigation (use header/nav)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/us/en/adventures/bali-surf-camp", "/us/en/magazine/arctic-surfing"],
+    "reuseCount": 2,
+    "lastUsed": "2026-08-06T00:00:00.000Z"
+  },
+  "notes": "Created from scratch: no vanilla 'breadcrumb' block exists in the AEM block collection or the local project. baseBlock is set to the variant name itself since there is no vanilla template source."
+}

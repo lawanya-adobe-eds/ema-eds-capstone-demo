@@ -1,0 +1,112 @@
+/* tabs-adventure -- design migrated from wknd.site (Bali Surf Camp).
+   Values extracted from source computed styles; see migration-work/tabs-adventure-extracted.css.
+   Decorated DOM:
+     .tabs-adventure > .tabs-adventure-list[role=tablist] > button.tabs-adventure-tab > p
+     .tabs-adventure > .tabs-adventure-panel[role=tabpanel] > div > (p | ul | picture) */
+
+/* ---------- tab list ---------- */
+.tabs-adventure .tabs-adventure-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 18px 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- tab buttons ---------- */
+.tabs-adventure .tabs-adventure-list button {
+  flex: 0 0 auto;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 8px 16px;
+  background-color: transparent;
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-xs);
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.tabs-adventure .tabs-adventure-list button:hover {
+  background-color: var(--light-color);
+}
+
+.tabs-adventure .tabs-adventure-list button:focus-visible {
+  outline: 2px solid var(--text-color);
+  outline-offset: -2px;
+}
+
+/* active tab: solid dark fill, white label (source rgb(32,32,32) / #fff) */
+.tabs-adventure .tabs-adventure-list button[aria-selected='true'] {
+  background-color: var(--text-color);
+  color: var(--background-color);
+}
+
+.tabs-adventure .tabs-adventure-list button[aria-selected='true']:hover {
+  background-color: var(--text-color);
+}
+
+/* ---------- panels ---------- */
+.tabs-adventure .tabs-adventure-panel {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--text-color);
+  font-size: var(--body-font-size-m);
+}
+
+.tabs-adventure .tabs-adventure-panel[aria-hidden='true'] {
+  display: none;
+}
+
+/* panel text -- source: 18px, line-height 2.5 (45px), 0.75em bottom margin, no top margin */
+.tabs-adventure .tabs-adventure-panel p {
+  margin: 0 0 0.75em;
+  font-size: var(--body-font-size-m);
+  line-height: 2.5;
+}
+
+/* itinerary sub-headings are authored as <strong>; keep them bold inline */
+.tabs-adventure .tabs-adventure-panel strong {
+  font-weight: 700;
+}
+
+/* "what to bring" list -- source: no bullets, 18px, line-height 2.0 (36px) */
+.tabs-adventure .tabs-adventure-panel ul {
+  margin: 18px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tabs-adventure .tabs-adventure-panel li {
+  margin: 0;
+  font-size: var(--body-font-size-m);
+  line-height: 2;
+  list-style: none;
+}
+
+/* overview image -- source renders full container width */
+.tabs-adventure .tabs-adventure-panel img {
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+/* the picture is authored inside a <p>; drop its bottom rhythm so the image
+   sits flush like the source (image p carries only the extracted 0.75em) */
+.tabs-adventure .tabs-adventure-panel p:has(> picture) {
+  line-height: 0;
+}
+
+/* tab labels are authored inside a <p>; strip its block rhythm */
+.tabs-adventure .tabs-adventure-list button p {
+  margin: 0;
+  line-height: inherit;
+}

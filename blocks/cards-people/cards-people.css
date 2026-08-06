@@ -1,0 +1,92 @@
+/* cards-people — WKND contributor grid: headshot, name, role, social links.
+   Each contributor imports as its own single-card block. To lay them out as a
+   responsive multi-column grid, the block wrappers flow inline within their
+   section and each card is width-constrained. */
+
+.section .cards-people-wrapper {
+  display: inline-block;
+  width: 100%;
+  vertical-align: top;
+}
+
+@media (width >= 600px) {
+  .section .cards-people-wrapper {
+    width: calc(50% - 12px);
+    margin-right: 12px;
+  }
+}
+
+@media (width >= 900px) {
+  .section .cards-people-wrapper {
+    width: calc(25% - 18px);
+    margin-right: 18px;
+  }
+}
+
+.cards-people > ul {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cards-people > ul > li {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  text-align: center;
+}
+
+.cards-people .cards-people-card-image {
+  line-height: 0;
+}
+
+.cards-people .cards-people-card-image img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.cards-people .cards-people-card-body {
+  margin: 12px 0 0;
+}
+
+/* Name */
+.cards-people .cards-people-card-body h3 {
+  margin: 0;
+  font-family: var(--heading-font-family);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text-color);
+}
+
+/* Role */
+.cards-people .cards-people-card-body h5 {
+  margin: 4px 0 0;
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: rgb(105 105 105);
+}
+
+/* Social links row */
+.cards-people .cards-people-card-body p {
+  margin: 10px 0 0;
+}
+
+.cards-people .cards-people-card-body a {
+  margin: 0 6px;
+  color: var(--text-color);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.cards-people .cards-people-card-body a:hover {
+  color: var(--link-color);
+}

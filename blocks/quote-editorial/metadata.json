@@ -1,0 +1,41 @@
+{
+  "variantName": "quote-editorial",
+  "baseBlock": "quote",
+  "version": "1.0.0",
+  "created": "2026-08-06T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://wknd.site/us/en/magazine/arctic-surfing.html",
+    "originPage": "WKND magazine article (Arctic Surfing / 'Aloha Spirits in Northern Norway')",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "pull-quote",
+    "imagePattern": "noimg"
+  },
+  "contentPattern": {
+    "structure": "quotation paragraph + optional attribution",
+    "buttonCount": 0,
+    "imageCount": 0
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "editorial / magazine article pull-quotes",
+      "highlighted quotations set off from running body text",
+      "long-form content that emphasizes a single sentence or short excerpt",
+      "quotes with an optional attribution / citation line"
+    ],
+    "notSuitableFor": [
+      "customer testimonials that also need a photo or logo (use a cards/columns variant)",
+      "multiple rotating quotes (use a carousel)",
+      "inline emphasis within a paragraph (use default bold/italic)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/us/en/magazine/arctic-surfing"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-06T00:00:00.000Z"
+  },
+  "notes": "Created from the vanilla AEM block-collection 'quote' block (fetched via get_vanilla_block_code; not listed in the sta-boilerplate library.json but present in the collection). CSS class names replaced quote -> quote-editorial; JS class assignments ('quote-quotation' -> 'quote-editorial-quotation', 'quote-attribution' -> 'quote-editorial-attribution') updated to match. Project type is 'da', so no _quote-editorial.json UE model file is generated. Applies to the pull-quote in the arctic-surfing article; the source pull-quote has no attribution, but the block supports an optional attribution row."
+}
