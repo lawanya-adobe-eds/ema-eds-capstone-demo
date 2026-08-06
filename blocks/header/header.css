@@ -1,52 +1,127 @@
-/* header and nav layout */
+/* WKND header — dark utility bar over a white main bar with logo, nav links, search. */
+
+/* The boilerplate sets a fixed header height (--nav-height); WKND's two-row header
+   must size to its own content so the page below is not overlapped. */
+header.header-wrapper,
+header {
+  height: auto;
+}
+
 header .nav-wrapper {
-  background-color: var(--background-color);
   width: 100%;
-  z-index: 2;
-  position: fixed;
+  background-color: #fff;
 }
 
-header nav {
-  box-sizing: border-box;
-  display: grid;
-  grid-template:
-    'hamburger brand tools' var(--nav-height)
-    'sections sections sections' 1fr / auto 1fr auto;
+/* ---------- Utility bar (row 0) ---------- */
+header .nav-utility {
+  display: flex;
   align-items: center;
-  gap: 0 24px;
-  margin: auto;
-  max-width: 1248px;
-  height: var(--nav-height);
+  justify-content: flex-end;
+  gap: 24px;
+  height: 25px;
   padding: 0 24px;
+  background-color: rgb(32 32 32);
+}
+
+header .nav-utility a {
+  color: rgb(235 235 235);
   font-family: var(--body-font-family);
+  font-size: 14px;
+  text-transform: uppercase;
+  text-decoration: none;
 }
 
-header nav[aria-expanded='true'] {
-  grid-template:
-    'hamburger brand' var(--nav-height)
-    'sections sections' 1fr
-    'tools tools' var(--nav-height) / auto 1fr;
-  overflow-y: auto;
-  min-height: 100dvh;
+/* stylelint-disable-next-line no-descending-specificity */
+header .nav-utility a:hover {
+  color: #fff;
 }
 
-@media (width >= 900px) {
-  header .nav-wrapper {
-    position: relative;
-  }
+/* Locale selector */
+header .nav-locale {
+  position: relative;
+}
 
-  header nav {
-    display: flex;
-    justify-content: space-between;
-    gap: 0 32px;
-    max-width: 1264px;
-    padding: 0 32px;
-  }
+header .nav-locale-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: none;
+  padding: 0;
+  color: rgb(235 235 235);
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
 
-  header nav[aria-expanded='true'] {
-    min-height: 0;
-    overflow: visible;
-  }
+header .nav-locale-trigger img {
+  display: block;
+  width: 20px;
+  height: auto;
+}
+
+header .nav-locale-chevron {
+  width: 0;
+  height: 0;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  border-top: 5px solid currentcolor;
+  transition: transform 0.2s ease;
+}
+
+header .nav-locale[aria-expanded="true"] .nav-locale-chevron {
+  transform: rotate(180deg);
+}
+
+header .nav-locale-list {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 20;
+  min-width: 140px;
+  margin: 0;
+  padding: 8px 0;
+  list-style: none;
+  background-color: rgb(32 32 32);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+}
+
+header .nav-locale[aria-expanded="true"] .nav-locale-list {
+  display: block;
+}
+
+header .nav-locale-list li {
+  margin: 0;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+header .nav-locale-list a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  white-space: nowrap;
+}
+
+header .nav-locale-list a:hover {
+  background-color: rgb(64 64 64);
+}
+
+header .nav-locale-list img {
+  width: 20px;
+  height: auto;
+}
+
+/* ---------- Main bar (row 1) ---------- */
+header nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
 }
 
 header nav p {
@@ -54,219 +129,205 @@ header nav p {
   line-height: 1;
 }
 
-header nav a:any-link {
-  color: currentcolor;
-}
-
-/* hamburger */
-header nav .nav-hamburger {
-  grid-area: hamburger;
-  height: 22px;
-  display: flex;
-  align-items: center;
-}
-
-header nav .nav-hamburger button {
-  height: 22px;
-  margin: 0;
-  border: 0;
-  border-radius: 0;
-  padding: 0;
-  background-color: var(--background-color);
-  color: inherit;
-  overflow: initial;
-  text-overflow: initial;
-  white-space: initial;
-}
-
-header nav .nav-hamburger-icon,
-header nav .nav-hamburger-icon::before,
-header nav .nav-hamburger-icon::after {
-  box-sizing: border-box;
-  display: block;
-  position: relative;
-  width: 20px;
-}
-
-header nav .nav-hamburger-icon::before,
-header nav .nav-hamburger-icon::after {
-  content: '';
-  position: absolute;
-  background: currentcolor;
-}
-
-header nav[aria-expanded='false'] .nav-hamburger-icon,
-header nav[aria-expanded='false'] .nav-hamburger-icon::before,
-header nav[aria-expanded='false'] .nav-hamburger-icon::after {
-  height: 2px;
-  border-radius: 2px;
-  background: currentcolor;
-}
-
-header nav[aria-expanded='false'] .nav-hamburger-icon::before {
-  top: -6px;
-}
-
-header nav[aria-expanded='false'] .nav-hamburger-icon::after {
-  top: 6px;
-}
-
-header nav[aria-expanded='true'] .nav-hamburger-icon {
-  height: 22px;
-}
-
-header nav[aria-expanded='true'] .nav-hamburger-icon::before,
-header nav[aria-expanded='true'] .nav-hamburger-icon::after {
-  top: 3px;
-  left: 1px;
-  transform: rotate(45deg);
-  transform-origin: 2px 1px;
-  width: 24px;
-  height: 2px;
-  border-radius: 2px;
-}
-
-header nav[aria-expanded='true'] .nav-hamburger-icon::after {
-  top: unset;
-  bottom: 3px;
-  transform: rotate(-45deg);
-}
-
-@media (width >= 900px) {
-  header nav .nav-hamburger {
-    display: none;
-    visibility: hidden;
-  }
-}
-
-/* brand */
-header .nav-brand {
-  grid-area: brand;
-  flex-basis: 128px;
-  font-size: var(--heading-font-size-s);
-  font-weight: 700;
-  line-height: 1;
+/* Brand / logo */
+header nav .nav-brand {
+  flex: 0 0 auto;
 }
 
 header nav .nav-brand img {
+  display: block;
   width: 128px;
   height: auto;
 }
 
-/* sections */
+/* Nav links — pushed to the right, search sits just after them */
 header nav .nav-sections {
-  grid-area: sections;
-  flex: 1 1 auto;
-  display: none;
-  visibility: hidden;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-left: auto;
 }
 
-header nav[aria-expanded='true'] .nav-sections {
-  display: block;
-  visibility: visible;
-  align-self: start;
+header nav .nav-search {
+  flex: 0 0 auto;
 }
 
 header nav .nav-sections ul {
+  display: flex;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
   list-style: none;
-  padding-left: 0;
-  font-size: var(--body-font-size-s);
 }
 
-header nav .nav-sections ul > li {
-  font-weight: 500;
+header nav .nav-sections li {
+  margin: 0;
 }
 
-header nav .nav-sections ul > li > ul {
-  margin-top: 0;
-}
-
-header nav .nav-sections ul > li > ul > li {
+/* stylelint-disable-next-line no-descending-specificity */
+header nav .nav-sections a {
+  color: rgb(32 32 32);
+  font-family: var(--body-font-family);
+  font-size: 14px;
   font-weight: 400;
+  text-transform: uppercase;
+  text-decoration: none;
 }
 
-@media (width >= 900px) {
-  header nav .nav-sections {
+header nav .nav-sections a:hover {
+  color: var(--link-color);
+}
+
+/* Search */
+header .nav-search form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: rgb(235 235 235 / 54%);
+}
+
+header .nav-search-icon {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  background-color: rgb(32 32 32);
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>') no-repeat center / contain;
+}
+
+header .nav-search input {
+  width: 140px;
+  border: none;
+  background: transparent;
+  color: rgb(32 32 32);
+  font-family: var(--body-font-family);
+  font-size: 12px;
+  outline: none;
+}
+
+/* Hamburger — hidden on desktop */
+header .nav-hamburger {
+  display: none;
+}
+
+/* ---------- Mobile ---------- */
+@media (width < 900px) {
+  header .nav-hamburger {
     display: block;
-    visibility: visible;
-    white-space: nowrap;
+    order: -1;
   }
 
-  header nav[aria-expanded='true'] .nav-sections {
-    align-self: unset;
-  }
-
-  header nav .nav-sections .nav-drop {
-    position: relative;
-    padding-right: 16px;
+  header .nav-hamburger button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    padding: 0;
     cursor: pointer;
   }
 
-  header nav .nav-sections .nav-drop::after {
+  header .nav-hamburger-icon,
+  header .nav-hamburger-icon::before,
+  header .nav-hamburger-icon::after {
     content: '';
-    display: inline-block;
-    position: absolute;
-    top: 0.5em;
-    right: 2px;
-    transform: rotate(135deg);
-    width: 6px;
-    height: 6px;
-    border: 2px solid currentcolor;
-    border-radius: 0 1px 0 0;
-    border-width: 2px 2px 0 0;
+    display: block;
+    position: relative;
+    width: 22px;
+    height: 2px;
+    background-color: rgb(32 32 32);
+    transition: transform 0.3s ease, opacity 0.3s ease;
   }
 
-  header nav .nav-sections .nav-drop[aria-expanded='true']::after {
-    top: unset;
-    bottom: 0.5em;
-    transform: rotate(315deg);
+  header .nav-hamburger-icon::before {
+    position: absolute;
+    top: -7px;
+  }
+
+  header .nav-hamburger-icon::after {
+    position: absolute;
+    top: 7px;
+  }
+
+  header nav[aria-expanded="true"] .nav-hamburger-icon {
+    background-color: transparent;
+  }
+
+  header nav[aria-expanded="true"] .nav-hamburger-icon::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+
+  header nav[aria-expanded="true"] .nav-hamburger-icon::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+
+  header nav {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 16px 0;
+  }
+
+  /* Top row of the main bar: hamburger + logo + search, all inline */
+  header nav .nav-brand {
+    flex: 1 1 auto;
+  }
+
+  header nav .nav-brand img {
+    width: 100px;
+  }
+
+  /* Nav links collapse into a drawer that spans the FULL viewport width
+     (edge-to-edge, flush) below the bar. The nav's own 16px side padding is
+     cancelled with negative margins so the drawer touches both edges; the
+     tap padding lives inside each link. */
+  header nav .nav-sections {
+    display: none;
+    order: 3;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: 100vw;
+    margin: 12px -16px 0;
+  }
+
+  header nav[aria-expanded="true"] .nav-sections {
+    display: flex;
   }
 
   header nav .nav-sections ul {
-    display: flex;
-    gap: 24px;
-    margin: 0;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
   }
 
-  header nav .nav-sections .default-content-wrapper > ul > li {
-    flex: 0 1 auto;
-    position: relative;
+  header nav .nav-sections li {
+    width: 100%;
+    border-top: 1px solid rgb(235 235 235);
   }
 
-  header nav .nav-sections .default-content-wrapper > ul > li > ul {
-    display: none;
-    position: relative;
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] > ul {
+  header nav .nav-sections li a {
     display: block;
-    position: absolute;
-    left: -24px;
-    width: 200px;
-    top: 150%;
-    padding: 16px;
-    background-color: var(--light-color);
-    white-space: initial;
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
   }
 
-  header nav .nav-sections .default-content-wrapper > ul > li > ul::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 16px;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid var(--light-color);
+  /* Search stays visible in the bar, to the right */
+  header .nav-search {
+    flex: 0 0 auto;
+    order: 2;
   }
 
-  header nav .nav-sections .default-content-wrapper > ul > li > ul > li {
-    padding: 8px 0;
+  header .nav-search input {
+    width: 120px;
   }
-}
 
-/* tools */
-header nav .nav-tools {
-  grid-area: tools;
+  header .nav-utility {
+    justify-content: space-between;
+    padding: 0 16px;
+  }
 }
