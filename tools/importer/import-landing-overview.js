@@ -7,6 +7,7 @@ import cardsTeaserParser from './parsers/cards-teaser.js';
 import cardsPeopleParser from './parsers/cards-people.js';
 
 // TRANSFORMER IMPORTS
+import wkndMembersTeasersTransformer from './transformers/wknd-members-teasers.js';
 import wkndCleanupTransformer from './transformers/wknd-cleanup.js';
 
 // PARSER REGISTRY
@@ -18,6 +19,7 @@ const parsers = {
 
 // TRANSFORMER REGISTRY
 const transformers = [
+  wkndMembersTeasersTransformer,
   wkndCleanupTransformer,
 ];
 
@@ -32,7 +34,7 @@ const PAGE_TEMPLATE = {
     },
     {
       name: 'cards-teaser',
-      instances: ['div.image-list.list', 'div.teaser.cmp-teaser--secure'],
+      instances: ['div.image-list.list'],
     },
     {
       name: 'cards-people',

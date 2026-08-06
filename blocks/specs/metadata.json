@@ -1,0 +1,1 @@
+{ "baseBlock": "specs", "variantName": "specs", "description": "Adventure spec pairs rendered as a label/value definition-list grid (Activity, Type, Length, Group, Difficulty, Price).", "createdFor": "adventure-detail" }

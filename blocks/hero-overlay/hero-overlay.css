@@ -36,6 +36,12 @@
 /* --- Text card --- */
 .hero-overlay > div:last-child > div {
   box-sizing: border-box;
+
+  /* flow-root establishes a block formatting context so the h2's top margin
+     stays inside the white card (like the source, whose card is a flex item)
+     instead of collapsing through the card's negative top margin. This gives
+     the full overlap on desktop and the 18px internal gap above the headline. */
+  display: flow-root;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 14px 24px;
@@ -46,9 +52,9 @@
 .hero-overlay h2 {
   margin: 18px 0 0;
   font-family: var(--heading-font-family);
-  font-size: var(--heading-font-size-xxl); /* 36px */
+  font-size: 36px; /* source renders 36px / 54px at all viewports */
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.5; /* 1.5 * 36px = 54px */
   color: var(--text-color);
 }
 
