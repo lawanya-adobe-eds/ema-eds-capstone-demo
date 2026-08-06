@@ -1,0 +1,10 @@
+{
+  "type": "da",
+  "sites": {
+    "ema-eds-capstone-demo": {
+      "previewOrg": "lawanya-adobe-eds",
+      "previewSite": "ema-eds-capstone-demo",
+      "libraryUrl": "https://main--sta-boilerplate--aemdemos.aem.page/tools/sidekick/library.json"
+    }
+  }
+}

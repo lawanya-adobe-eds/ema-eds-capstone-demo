@@ -1,0 +1,94 @@
+/* Block: cards-teaser -- visual design migrated from WKND image-list.
+   Values extracted from source computed styles (getComputedStyle). */
+
+/* Grid: mobile-first single column, widening to multi-column.
+   Source uses a flex-wrap row of fixed 274px items (260px image + 14px
+   right gutter) with a 32px bottom gutter; expressed here as a responsive
+   grid so it degrades cleanly on small screens. */
+.cards-teaser > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px 14px;
+}
+
+@media (width >= 600px) {
+  .cards-teaser > ul {
+    /* minmax(0, ...) lets tracks shrink below the nowrap description width
+       so columns stay equal instead of blowing out. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 900px) {
+  .cards-teaser > ul {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Cards are flat -- no border, background, shadow or radius in the source. */
+.cards-teaser > ul > li {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+/* Image on top, cropped to a consistent ratio (source image ~260x200). */
+.cards-teaser .cards-teaser-card-image {
+  line-height: 0;
+}
+
+.cards-teaser .cards-teaser-card-image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 13 / 10;
+  object-fit: cover;
+}
+
+/* Text area below the image. */
+.cards-teaser .cards-teaser-card-body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Title: body font, uppercase, semi-bold, dark text (not the serif heading,
+   not link-blue). Overrides the global h3 (Asar 24px/400). */
+.cards-teaser .cards-teaser-card-body h3 {
+  margin: 10px 0 0;
+  font-family: var(--body-font-family);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 27px;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+
+.cards-teaser .cards-teaser-card-body h3 a:any-link {
+  color: var(--text-color);
+  font: inherit;
+  text-decoration: none;
+}
+
+.cards-teaser .cards-teaser-card-body h3 a:hover {
+  text-decoration: underline;
+}
+
+/* Description: small gray uppercase body copy, 16px below the title,
+   clamped to a single line with an ellipsis (matches source). */
+.cards-teaser .cards-teaser-card-body p {
+  margin: 16px 0 0;
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  text-transform: uppercase;
+  color: rgb(105 105 105);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

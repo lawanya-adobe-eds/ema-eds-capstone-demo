@@ -1,0 +1,114 @@
+/* Block: columns-featured — "Featured Article" teaser.
+   Values extracted from source computed styles (wknd.site featured teaser).
+   Layout: image left (~62%), light-gray text box right (~38%) on desktop;
+   stacked (text top, image bottom) on mobile. */
+
+/* Row / cells */
+.columns-featured > div {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Text cell — the light-gray content box (mobile: on top) */
+.columns-featured > div > div:first-child {
+  order: 0;
+  box-sizing: border-box;
+  padding: 40px 24px;
+  background-color: rgb(235 235 235);
+}
+
+/* Image cell (mobile: below the text) */
+.columns-featured > div > .columns-featured-img-col {
+  order: 1;
+}
+
+.columns-featured > div > .columns-featured-img-col picture {
+  display: block;
+  height: 100%;
+}
+
+.columns-featured img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Description — base paragraph style in the text cell (14px) */
+.columns-featured > div > div:first-child > p {
+  margin: 0;
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--text-color);
+}
+
+/* Pretitle ("Featured Article") — first paragraph in the text cell */
+.columns-featured > div > div:first-child > p:first-child {
+  margin: 0 0 13.5px;
+  font-family: var(--body-font-family);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--text-color);
+}
+
+/* Title */
+.columns-featured h2 {
+  margin: 18px 0;
+  font-family: var(--heading-font-family);
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-color);
+}
+
+/* CTA — yellow button (source: rgb(255,234,0) fill, plain link, not EDS .button) */
+.columns-featured > div > div:first-child > p:last-child {
+  margin: 18px 0 0;
+}
+
+.columns-featured > div > div:first-child a:any-link {
+  display: inline-block;
+  padding: 14px 35px;
+  border: none;
+  border-radius: 0;
+  background-color: rgb(255 234 0);
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.columns-featured > div > div:first-child a:any-link:hover {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+/* Desktop: side-by-side, image left, text right */
+@media (width >= 900px) {
+  .columns-featured > div {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  /* text box on the right */
+  .columns-featured > div > div:first-child {
+    order: 1;
+    flex: 0 0 39.8%;
+    padding: 63px 36px 36px;
+  }
+
+  /* image fills the remaining width on the left */
+  .columns-featured > div > .columns-featured-img-col {
+    order: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}

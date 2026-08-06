@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "projectType": "da"
+  },
+  "templates": [
+    {
+      "name": "homepage",
+      "urls": [
+        "https://wknd.site/us/en.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en.html",
+      "coverageGaps": [],
+      "description": "WKND homepage: hero image carousel with rotating slides, a featured-article teaser, a grid of recent article cards, a full-width hero teaser, and a grid of adventure cards. Header and footer are global experience fragments.",
+      "blocks": [
+        {
+          "name": "carousel-hero",
+          "instances": [
+            "div.carousel.cmp-carousel--hero"
+          ]
+        },
+        {
+          "name": "columns-featured",
+          "instances": [
+            "div.teaser.cmp-teaser--featured"
+          ]
+        },
+        {
+          "name": "cards-teaser",
+          "instances": [
+            "main.cmp-layout-container--fixed:nth-of-type(1) div.image-list.list",
+            "main.cmp-layout-container--fixed:nth-of-type(2) div.image-list.list"
+          ]
+        },
+        {
+          "name": "hero-overlay",
+          "instances": [
+            "div.teaser.cmp-teaser--hero.cmp-teaser--imagebottom"
+          ]
+        }
+      ]
+    }
+  ]
+}
