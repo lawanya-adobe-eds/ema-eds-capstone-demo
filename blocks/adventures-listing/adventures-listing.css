@@ -51,6 +51,14 @@
   display: none;
 }
 
+/* Grey separator below the grid (source: 1px solid rgb(235 235 235), 9px margin). */
+.adventures-listing .adventures-listing-separator {
+  height: 0;
+  margin: 9px 0;
+  border: 0;
+  border-top: 1px solid rgb(235 235 235);
+}
+
 /* ---------- card grid ----------
    Mobile-first single column widening to a 4-up grid, matching the source. */
 .adventures-listing .adventures-listing-panel ul {

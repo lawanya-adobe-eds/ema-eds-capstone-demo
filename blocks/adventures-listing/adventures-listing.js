@@ -1,6 +1,25 @@
 import { toClassName, createOptimizedPicture } from '../../scripts/aem.js';
 
 /**
+ * Map the raw indexed category (an adventure's "Activity" spec) to the filter
+ * tab labels used on the source (wknd.site: All, Climbing, Cycling, Skiing,
+ * Surfing, Travel). Activities not listed keep their own name. This groups the
+ * long-tail activities (Camping, Social) under "Travel" and normalises
+ * "Rock Climbing" to "Climbing", matching the source's tab set.
+ */
+const CATEGORY_LABELS = {
+  'Rock Climbing': 'Climbing',
+  Camping: 'Travel',
+  Social: 'Travel',
+};
+
+/** Resolve an adventure's indexed category to its display tab label. */
+function tabLabel(category) {
+  const cat = (category || '').trim();
+  return CATEGORY_LABELS[cat] || cat;
+}
+
+/**
  * Resolve the query-index path for both local dev (/content) and production.
  */
 function getIndexPath() {
@@ -95,9 +114,9 @@ export default async function decorate(block) {
     return;
   }
 
-  // Distinct categories, in first-seen alphabetical order, for the filter tabs.
+  // Distinct category tab labels (mapped to the source's set), alphabetical.
   const categories = [...new Set(adventures
-    .map((item) => (item.category || '').trim())
+    .map((item) => tabLabel(item.category))
     .filter(Boolean))].sort();
   const tabs = ['All', ...categories];
 
@@ -138,7 +157,7 @@ export default async function decorate(block) {
 
     const items = label === 'All'
       ? adventures
-      : adventures.filter((item) => (item.category || '').trim() === label);
+      : adventures.filter((item) => tabLabel(item.category) === label);
     const panel = document.createElement('div');
     panel.className = 'adventures-listing-panel';
     panel.id = `adv-panel-${id}`;
@@ -165,5 +184,10 @@ export default async function decorate(block) {
     activate(next);
   });
 
-  block.append(tablist, panelsWrap);
+  // Grey separator line below the grid (matches the source's <hr> between the
+  // Current Adventures grid and the footer).
+  const separator = document.createElement('hr');
+  separator.className = 'adventures-listing-separator';
+
+  block.append(tablist, panelsWrap, separator);
 }
