@@ -60,10 +60,12 @@
 }
 
 /* ---------- card grid ----------
-   Mobile-first single column widening to a 4-up grid, matching the source. */
+   Mobile: a single fixed 260px card centered with side gutters (matches the
+   source). Widens to a fluid 2-up at 600px and 4-up at 900px. */
 .adventures-listing .adventures-listing-panel ul {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: 260px;
+  justify-content: center;
   gap: 32px 14px;
   margin: 0;
   padding: 0;
@@ -73,6 +75,7 @@
 @media (width >= 600px) {
   .adventures-listing .adventures-listing-panel ul {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: normal;
   }
 }
 
