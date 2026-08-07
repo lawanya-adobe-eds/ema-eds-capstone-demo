@@ -230,7 +230,7 @@ export default async function decorate(block) {
   const input = document.createElement('input');
   input.type = 'search';
   input.name = 'q';
-  input.placeholder = 'Search';
+  input.placeholder = 'SEARCH';
   input.setAttribute('aria-label', 'Search');
   input.setAttribute('autocomplete', 'off');
   const results = document.createElement('ul');
