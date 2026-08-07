@@ -5,6 +5,7 @@
 
 .section .cards-people-wrapper {
   display: inline-block;
+  box-sizing: border-box;
   width: 100%;
   vertical-align: top;
 }
@@ -42,13 +43,19 @@
   text-align: center;
 }
 
+/* Circular headshot, matching the source (164px circle, cover-cropped).
+   Centered within the card so it reads as a round avatar. */
 .cards-people .cards-people-card-image {
+  display: flex;
+  justify-content: center;
   line-height: 0;
 }
 
 .cards-people .cards-people-card-image img {
-  width: 100%;
+  width: 164px;
+  max-width: 100%;
   aspect-ratio: 1 / 1;
+  border-radius: 50%;
   object-fit: cover;
 }
 
@@ -65,28 +72,41 @@
   color: var(--text-color);
 }
 
-/* Role */
+/* Role — bold uppercase label (source renders weight 600). */
 .cards-people .cards-people-card-body h5 {
   margin: 4px 0 0;
   font-family: var(--body-font-family);
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 600;
   text-transform: uppercase;
   color: rgb(105 105 105);
 }
 
-/* Social links row */
+/* Social links row — centered row of icon links. */
 .cards-people .cards-people-card-body p {
-  margin: 10px 0 0;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 12px 0 0;
 }
 
-.cards-people .cards-people-card-body a {
-  margin: 0 6px;
+/* Social icon links: dark WKND glyphs (~18px), sized like the source. */
+.cards-people .cards-people-card-body a.cards-people-social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
   color: var(--text-color);
-  font-size: 14px;
-  text-decoration: none;
+  transition: opacity 0.2s ease;
 }
 
-.cards-people .cards-people-card-body a:hover {
-  color: var(--link-color);
+.cards-people .cards-people-card-body a.cards-people-social-icon:hover {
+  opacity: 0.7;
+}
+
+.cards-people .cards-people-card-body a.cards-people-social-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: rgb(32 32 32);
 }
