@@ -143,6 +143,35 @@ function decorateButtons(main) {
 }
 
 /**
+ * Rewrites internal links that still carry a `.html` extension to clean,
+ * extension-less Edge Delivery URLs (e.g. `/us/en/magazine.html` ->
+ * `/us/en/magazine`). Only same-origin links are touched; external links
+ * (e.g. docs.adobe.com) and non-http schemes are left untouched. Query strings
+ * and hash fragments are preserved.
+ * @param {HTMLElement} main The main container element
+ */
+function decorateLinks(main) {
+  main.querySelectorAll('a[href]').forEach((a) => {
+    const raw = a.getAttribute('href');
+    if (!raw) return;
+    let url;
+    try {
+      url = new URL(a.href, window.location);
+    } catch {
+      return;
+    }
+    // Only internal (same-origin) page links ending in .html.
+    if (url.origin !== window.location.origin) return;
+    if (!url.pathname.endsWith('.html')) return;
+
+    const cleanPath = url.pathname.replace(/\.html$/, '');
+    // Preserve whether the author used a root-relative or absolute-origin href.
+    const prefix = /^https?:\/\//i.test(raw) ? url.origin : '';
+    a.setAttribute('href', `${prefix}${cleanPath}${url.search}${url.hash}`);
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -153,6 +182,7 @@ export function decorateMain(main) {
   decorateSections(main);
   decorateBlocks(main);
   decorateButtons(main);
+  decorateLinks(main);
 }
 
 /**
