@@ -112,6 +112,20 @@ h4 { font-size: var(--heading-font-size-m); }
 h5 { font-size: var(--heading-font-size-s); }
 h6 { font-size: var(--heading-font-size-xs); }
 
+/* Standalone section-title headings (authored as default content, e.g.
+   "Recent Articles", "Next Adventures", "All Articles", "Members Only") carry
+   a short yellow underline in the source (an 84px, 2px rgb(255 234 0) bar
+   sitting 8px below the text). Scoped to default-content h2s so titles inside
+   blocks, teasers and cards — which the source leaves un-underlined — are not
+   affected. */
+main .default-content-wrapper > h2::after {
+  content: "";
+  display: block;
+  width: 84px;
+  margin-top: 8px;
+  border-bottom: 2px solid rgb(255 234 0);
+}
+
 p,
 dl,
 ol,
