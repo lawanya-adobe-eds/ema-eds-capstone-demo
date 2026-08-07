@@ -121,13 +121,48 @@ var CustomImportScript = (() => {
     }
   }
 
+  // tools/importer/transformers/wknd-listings.js
+  var TransformHook2 = { beforeTransform: "beforeTransform", afterTransform: "afterTransform" };
+  function isBlock(table, name) {
+    const header = table.querySelector("tr th, tr td");
+    if (!header) return false;
+    const label = header.textContent.trim().replace(/\s*\(.*\)$/, "").toLowerCase().replace(/\s+/g, "-");
+    return label === name;
+  }
+  function createMarker(document, name, cellText) {
+    const rows = [[name]];
+    if (cellText) rows.push([cellText]);
+    return WebImporter.DOMUtils.createTable(rows, document);
+  }
+  function transform2(hookName, element, payload) {
+    if (hookName !== TransformHook2.afterTransform) return;
+    const { document } = payload;
+    const url = payload.params && payload.params.originalURL || payload.url || "";
+    const path = (() => {
+      try {
+        return new URL(url).pathname;
+      } catch (e) {
+        return String(url);
+      }
+    })();
+    const tables = [...element.querySelectorAll("table")];
+    if (/\/adventures(\.html)?$/.test(path)) {
+      const grid = tables.find((t) => isBlock(t, "tabs-adventure"));
+      if (grid) grid.replaceWith(createMarker(document, "adventures-listing"));
+    } else if (/\/magazine(\.html)?$/.test(path)) {
+      const grid = tables.find((t) => isBlock(t, "cards-teaser"));
+      if (grid) grid.replaceWith(createMarker(document, "magazine-listing", "All Articles"));
+    }
+  }
+
   // tools/importer/import-adventures-listing.js
   var parsers = {
     "hero-overlay": parse,
     "tabs-adventure": parse2
   };
   var transformers = [
-    transform
+    transform,
+    transform2
   ];
   var PAGE_TEMPLATE = {
     name: "adventures-listing",

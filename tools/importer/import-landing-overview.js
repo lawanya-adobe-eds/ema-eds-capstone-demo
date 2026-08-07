@@ -9,6 +9,7 @@ import cardsPeopleParser from './parsers/cards-people.js';
 // TRANSFORMER IMPORTS
 import wkndMembersTeasersTransformer from './transformers/wknd-members-teasers.js';
 import wkndCleanupTransformer from './transformers/wknd-cleanup.js';
+import wkndListingsTransformer from './transformers/wknd-listings.js';
 
 // PARSER REGISTRY
 const parsers = {
@@ -21,6 +22,7 @@ const parsers = {
 const transformers = [
   wkndMembersTeasersTransformer,
   wkndCleanupTransformer,
+  wkndListingsTransformer,
 ];
 
 // PAGE TEMPLATE CONFIGURATION - Embedded from page-templates.json

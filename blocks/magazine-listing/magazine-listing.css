@@ -1,0 +1,88 @@
+/* magazine-listing — dynamic article grid built from the query index.
+   Visual design matches the source "All Articles" card grid (same card shape
+   as the adventures listing / cards-teaser blocks). */
+
+/* optional authored heading above the grid */
+.magazine-listing > h2 {
+  margin: 0 0 0.25em;
+}
+
+/* ---------- card grid ----------
+   Mobile-first single column widening to a 4-up grid, matching the source. */
+.magazine-listing ul {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (width >= 600px) {
+  .magazine-listing ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 900px) {
+  .magazine-listing ul {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.magazine-listing li {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+/* image cell: cropped to a flush tile like the source */
+.magazine-listing .magazine-listing-card-image {
+  display: block;
+  line-height: 0;
+}
+
+.magazine-listing .magazine-listing-card-image img {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* title: uppercase dark bold label (not a blue text link) */
+.magazine-listing .magazine-listing-card-body h3 {
+  margin: 10px 0 0;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  font-weight: 600;
+  line-height: 27px;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+
+.magazine-listing .magazine-listing-card-body h3 a:any-link {
+  color: var(--text-color);
+  font: inherit;
+  text-decoration: none;
+}
+
+.magazine-listing .magazine-listing-card-body h3 a:hover {
+  text-decoration: underline;
+}
+
+/* description: single grey uppercase ellipsised line so cards are same height */
+.magazine-listing .magazine-listing-card-body p {
+  margin: 16px 0 0;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-xs);
+  font-weight: 400;
+  line-height: 21px;
+  text-transform: uppercase;
+  color: rgb(105 105 105);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

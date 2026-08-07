@@ -7,6 +7,7 @@ import tabsAdventureParser from './parsers/tabs-adventure.js';
 
 // TRANSFORMER IMPORTS
 import wkndCleanupTransformer from './transformers/wknd-cleanup.js';
+import wkndListingsTransformer from './transformers/wknd-listings.js';
 
 // PARSER REGISTRY
 const parsers = {
@@ -17,6 +18,7 @@ const parsers = {
 // TRANSFORMER REGISTRY
 const transformers = [
   wkndCleanupTransformer,
+  wkndListingsTransformer,
 ];
 
 // PAGE TEMPLATE CONFIGURATION - Embedded from page-templates.json

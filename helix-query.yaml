@@ -19,6 +19,15 @@ indices:
         select: head > meta[property="og:image"]
         value: |
           match(attribute(el, 'content'), 'https:\/\/[^"]*')
+      category:
+        # Adventure pages expose their category as the first spec pair
+        # (label "Activity", value e.g. "Surfing"). The value is the second
+        # cell of the first row of the specs block. Non-adventure pages have no
+        # specs block, so this resolves to empty — which the listing blocks
+        # simply ignore.
+        select: main .specs > div:first-child > div:last-child
+        value: |
+          textContent(el)
       lastModified:
         select: none
         value: |
