@@ -25,8 +25,8 @@
      Set directly here (do NOT self-reference via var(); brand.css also defines
      these and is imported first, but a self-referential var() resolves to an
      invalid/empty value per the CSS spec). */
-  --body-font-family: "Source Sans Pro", "Helvetica Neue", helvetica, arial, sans-serif;
-  --heading-font-family: asar, georgia, "Times New Roman", times, serif;
+  --body-font-family: "Source Sans Pro", "Source Sans Pro Fallback", "Helvetica Neue", helvetica, arial, sans-serif;
+  --heading-font-family: asar, "Asar Fallback", georgia, "Times New Roman", times, serif;
 
   /* body sizes */
   --body-font-size-m: 18px;
