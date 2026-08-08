@@ -123,3 +123,37 @@ system reminders are omitted; only substantive requests are listed.
 
 ## 26. Update the prompt history
 > check until which prompts are stored in prompt-history.md file and commit and push the remaining uncommitted chat prompts used as well to the same file
+
+## 27. Run visual critique to close gaps (all breakpoints)
+> Run critique on key blocks/pages to close visual gaps for desktop and mobiles as well as for tablet
+(Result: site-level critique across 7 templates × 3 breakpoints; found and fixed the page-title h1 size — 48px desktop / 36px mobile → constant 40px to match the source.)
+
+## 28. Generate EDS migration scoping report
+> generate EDS migration scoping report - Site Scope report inventorying WKND's templates, block variants, and pages
+
+## 29. Analyze what's needed for Lighthouse 100
+> analyse and show me what needs to be done to have lighthouse score to reach 100 while preserving: [standard preservation + validation + Core Web Vitals clause]
+
+## 30. Fix LCP and FCP
+> fix LCP AND FCP while preserving: [standard preservation clause]. Very important: web vitals should not be affected by this change.
+(Result: self-hosted Source Sans Pro + Asar fonts, removed the render-blocking Google Fonts link + preconnects, added metric-matched fallbacks; removed unused Roboto fonts.)
+
+## 31. Add width/height to images to fix CLS
+> add width/height to images to fix CLS
+(Result: explicit dimensions on all block-generated images + a reserveImageSpace pass in decorateMain for content images; 0 dimensionless images site-wide.)
+
+## 32. Fix the main reveal-shift (CLS)
+> yes proceed with the main reveal-shift fix
+(Result: reserved the correct header height per breakpoint via --nav-height (77px mobile/tablet, 121px desktop) and min-height on the header so it never collapses/grows; CLS → ~0.)
+
+## 33. Re-run Lighthouse to confirm scores
+> run lighthouse again to confirm the scores
+
+## 34. Fix nav yellow button on hover/click
+> Fix the navigation "Magazine / Adventures / FAQs / About Us" as the yellow button is missing while hovering and clicking. Check the real website and give fix accordingly while preserving: [standard preservation + validation + Core Web Vitals clause]. Very important: web vitals should not be affected by this change.
+
+> verify it matches wknd.site on mobile too
+(Result: yellow hover/active fill scoped to the desktop bar with aria-current=page for the active section; matched the source's no-yellow mobile drawer.)
+
+## 35. Update the prompt history
+> check until which prompts are stored in prompt-history.md file and commit and push the remaining uncommitted chat prompts used as well to the same file
