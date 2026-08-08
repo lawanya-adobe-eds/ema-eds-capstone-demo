@@ -539,3 +539,97 @@ main a.magazine-article-social-icon svg {
   height: 18px;
   fill: rgb(235 235 235);
 }
+
+/* ---------- Adventure detail page ----------
+   Adventure detail pages (breadcrumb + carousel-gallery + specs + tabs-adventure
+   in one section) match the source layout: the breadcrumb, image carousel and
+   title span full width, then a narrow left sidebar (spec pairs + "Share this
+   Adventure") sits parallel to the adventure tabs. Scoped to the section that
+   carries both the specs and tabs-adventure blocks so other pages are unaffected. */
+
+/* Title underline: the source gives the adventure <h1> the WKND yellow
+   section-title bar (84px, 2px rgb(255 234 0), 8px below the text). The global
+   underline rule only targets standalone <h2>s, so the <h1> needs its own rule. */
+main .section.specs-container.tabs-adventure-container .default-content-wrapper > h1::after {
+  content: "";
+  display: block;
+  width: 84px;
+  margin-top: 8px;
+  border-bottom: 2px solid rgb(255 234 0);
+}
+
+@media (width >= 900px) {
+  /* Two-column layout: the title (first default-content) spans both columns,
+     then the specs sidebar + "Share this Adventure" heading fill the left
+     column while the adventure tabs fill the right. Column proportions match
+     the source's ~1:3 ratio (sidebar / tabs). The breadcrumb and carousel stay
+     full-width above via explicit column spans. */
+  main .section.specs-container.tabs-adventure-container {
+    display: grid;
+    grid-template-columns: 3fr 9fr;
+
+    /* Rows: breadcrumb, carousel, title, specs, share, then an auto row that
+       absorbs the tall tabs column so it never stretches the sidebar rows —
+       keeping "Share this Adventure" tight below the specs, as in the source. */
+    grid-template-rows: auto auto auto min-content min-content auto;
+    column-gap: 24px;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* Neutralise the per-wrapper centering/width so the grid controls layout. */
+  main .section.specs-container.tabs-adventure-container > div {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Full-width rows: breadcrumb, carousel and the title stack above the two
+     columns (explicit rows keep placement stable regardless of source order). */
+  main .section.specs-container.tabs-adventure-container > .breadcrumb-wrapper {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  main .section.specs-container.tabs-adventure-container > .carousel-gallery-wrapper {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  /* The title is the default-content wrapper holding the <h1>; span both
+     columns. Targeted by content (:has) since several sibling wrappers are
+     all <div>s, which makes :first-of-type/:last-of-type unreliable here. */
+  main .section.specs-container.tabs-adventure-container > .default-content-wrapper:has(> h1) {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+
+  /* Left sidebar: specs block (row 4) + the "Share this Adventure"
+     default-content that follows it (row 5), stacked in column 1. */
+  main .section.specs-container.tabs-adventure-container > .specs-wrapper {
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  main .section.specs-container.tabs-adventure-container > .default-content-wrapper:has(> h5) {
+    grid-column: 1;
+    grid-row: 5;
+  }
+
+  /* Right column: the adventure tabs, top-aligned, spanning from the specs row
+     to the end so the tabs' height lives in the auto row (row 6) and doesn't
+     stretch the sidebar's min-content rows. */
+  main .section.specs-container.tabs-adventure-container > .tabs-adventure-wrapper {
+    grid-column: 2;
+    grid-row: 4 / -1;
+    align-self: start;
+  }
+
+  /* In the narrow sidebar the spec pairs stack in a single column (source),
+     overriding the 3-up grid used on wider standalone contexts. */
+  main .section.specs-container.tabs-adventure-container .specs dl {
+    grid-template-columns: 1fr;
+  }
+}
