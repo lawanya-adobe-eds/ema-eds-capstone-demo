@@ -1,10 +1,15 @@
 /* WKND header — dark utility bar over a white main bar with logo, nav links, search. */
 
-/* The boilerplate sets a fixed header height (--nav-height); WKND's two-row header
-   must size to its own content so the page below is not overlapped. */
+/* The boilerplate sets a fixed header height (--nav-height); WKND's two-row
+   header sizes to its own content. Use min-height (not height:auto) so the
+   header always holds the reserved --nav-height space — even before the header
+   block has decorated — and never collapses to 0 and back, which would shift
+   the page content below (CLS). --nav-height is tuned per breakpoint in
+   styles.css to match the final rendered header height. */
 header.header-wrapper,
 header {
   height: auto;
+  min-height: var(--nav-height);
 }
 
 /* Keep the header pinned to the top while scrolling (matches wknd.site).
