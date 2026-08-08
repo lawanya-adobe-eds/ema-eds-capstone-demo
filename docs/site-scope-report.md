@@ -216,7 +216,32 @@ templates, all blocks, header/footer/nav, listings, and search.
 - Two-column/parallel layouts (adventure specs+tabs, FAQ "Need more help",
   magazine "Share this story") are rebuilt at runtime/CSS to match the source
   while remaining responsive.
+- Fonts (Source Sans Pro, Asar) are self-hosted from `/fonts` (latin subset)
+  instead of loaded from Google Fonts, with metric-matched fallback faces — a
+  performance/privacy improvement with no visual difference (see §8). The
+  boilerplate's unused Roboto fonts were removed.
+- The mobile nav is a light, edge-to-edge dropdown rather than the source's dark
+  off-canvas drawer; the WKND yellow hover/active treatment on nav links is
+  scoped to the desktop bar (the source shows no yellow on mobile).
+
+## 8. Performance & Core Web Vitals
+
+Optimized to EDS best practices and validated on the live site across desktop,
+tablet, and mobile:
+
+- **FCP / LCP** — the render-blocking Google Fonts `<link>` (and its two
+  preconnects) was removed and the fonts self-hosted (`font-display: swap`); the
+  LCP hero image is marked `fetchpriority="high"` + eager. Measured FCP/LCP are
+  well within the "good" range.
+- **CLS** — driven to ~0: every image carries explicit `width`/`height` (block
+  images set them to the CSS aspect ratio; a `reserveImageSpace()` pass in
+  `decorateMain` sets intrinsic dimensions on free-flowing content images), and
+  the header reserves its true height per breakpoint (`--nav-height` 77px
+  mobile/tablet, 121px desktop; `min-height` on the header) so content no longer
+  shifts as the header decorates.
+- **Constraints honored** — `scripts/aem.js` is never modified; all changes are
+  in block CSS/JS, `styles/`, and `head.html`.
 
 **Quality bar:** each template was validated against the source at desktop
 (1440), tablet (768), and mobile (375) for visual fidelity, responsiveness, and
-zero horizontal overflow, and targets Core Web Vitals per EDS best practices.
+zero horizontal overflow, and meets Core Web Vitals per EDS best practices (§8).
