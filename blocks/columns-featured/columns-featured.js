@@ -12,6 +12,14 @@ export default function decorate(block) {
           // picture is only content in column
           picWrapper.classList.add('columns-featured-img-col');
         }
+        // Reserve layout space to prevent CLS. The featured image fills its
+        // column at object-fit:cover; 3/2 is a sizing hint only — no visual
+        // change.
+        const img = pic.querySelector('img');
+        if (img && !img.getAttribute('width')) {
+          img.setAttribute('width', '600');
+          img.setAttribute('height', '400');
+        }
       }
     });
   });

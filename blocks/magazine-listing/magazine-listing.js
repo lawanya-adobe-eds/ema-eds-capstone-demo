@@ -40,6 +40,12 @@ function buildCard(item) {
   imageLink.href = withPrefix(item.path);
   if (item.image) {
     const pic = createOptimizedPicture(item.image, item.title, false, [{ width: '750' }]);
+    // Reserve layout space to prevent CLS. Card image renders at a fixed 200px
+    // height, full-width, object-fit:cover; 260x200 matches the card ratio —
+    // sizing hint only, no visual change.
+    const img = pic.querySelector('img');
+    img.setAttribute('width', '260');
+    img.setAttribute('height', '200');
     imageLink.append(pic);
   }
 

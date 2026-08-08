@@ -38,7 +38,13 @@ export default function decorate(block) {
   });
   ul.querySelectorAll('picture > img').forEach((img) => {
     const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
-    moveInstrumentation(img, optimizedPic.querySelector('img'));
+    const newImg = optimizedPic.querySelector('img');
+    // Reserve layout space to prevent CLS. width/height match the 13:10 ratio
+    // the CSS enforces (width:100%; aspect-ratio:13/10; object-fit:cover), so
+    // the values are a sizing hint only — no visual change.
+    newImg.setAttribute('width', '650');
+    newImg.setAttribute('height', '500');
+    moveInstrumentation(img, newImg);
     img.closest('picture').replaceWith(optimizedPic);
   });
   block.textContent = '';

@@ -147,6 +147,12 @@ export default async function decorate(block) {
     // defer the rest. Loading hints only — no visual change.
     slide.querySelectorAll('img').forEach((img) => {
       img.setAttribute('decoding', 'async');
+      // Reserve layout space to prevent CLS. Slides render full-width via
+      // object-fit; 16:9 is a sizing hint only — no visual change.
+      if (!img.getAttribute('width')) {
+        img.setAttribute('width', '1600');
+        img.setAttribute('height', '900');
+      }
       if (idx === 0) {
         img.setAttribute('loading', 'eager');
         img.setAttribute('fetchpriority', 'high');

@@ -332,6 +332,28 @@ function decorateLinks(main) {
 }
 
 /**
+ * Give content images explicit width/height so the browser reserves layout
+ * space and avoids layout shift (CLS). Block-generated images already carry
+ * dimensions; this covers free-flowing content images (article body, tab
+ * panels) that come straight from the backend markup without them. The
+ * intrinsic size is read once the image has decoded; the ratio is preserved so
+ * there is no visual change (the CSS keeps width:100%/height:auto).
+ * @param {Element} main The main element
+ */
+function reserveImageSpace(main) {
+  main.querySelectorAll('img:not([width]):not([height])').forEach((img) => {
+    const apply = () => {
+      if (img.naturalWidth && img.naturalHeight && !img.getAttribute('width')) {
+        img.setAttribute('width', img.naturalWidth);
+        img.setAttribute('height', img.naturalHeight);
+      }
+    };
+    if (img.complete && img.naturalWidth) apply();
+    else img.addEventListener('load', apply, { once: true });
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -343,6 +365,7 @@ export function decorateMain(main) {
   decorateBlocks(main);
   decorateButtons(main);
   decorateLinks(main);
+  reserveImageSpace(main);
   // Runs after sections/blocks are decorated so the section + wrapper elements
   // it relies on exist. Guarded to magazine article pages internally.
   try {

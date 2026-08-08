@@ -12,6 +12,14 @@ export default function decorate(block) {
     });
     ul.append(li);
   });
-  ul.querySelectorAll('picture > img').forEach((img) => img.closest('picture').replaceWith(createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }])));
+  ul.querySelectorAll('picture > img').forEach((img) => {
+    const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
+    // Reserve layout space to prevent CLS. 4:3 to match the CSS
+    // (aspect-ratio:4/3) — sizing hint only, no visual change.
+    const newImg = optimizedPic.querySelector('img');
+    newImg.setAttribute('width', '800');
+    newImg.setAttribute('height', '600');
+    img.closest('picture').replaceWith(optimizedPic);
+  });
   block.replaceChildren(ul);
 }

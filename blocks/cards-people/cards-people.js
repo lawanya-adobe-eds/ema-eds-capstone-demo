@@ -38,6 +38,11 @@ export default function decorate(block) {
   });
   ul.querySelectorAll('picture > img').forEach((img) => {
     const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
+    // Reserve layout space to prevent CLS. Square (1:1) to match the CSS
+    // (aspect-ratio:1/1; object-fit:cover) — sizing hint only, no visual change.
+    const newImg = optimizedPic.querySelector('img');
+    newImg.setAttribute('width', '164');
+    newImg.setAttribute('height', '164');
     img.closest('picture').replaceWith(optimizedPic);
   });
 
