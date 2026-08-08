@@ -476,12 +476,14 @@ main .magazine-article-share li a:hover .magazine-article-share-title {
   color: var(--link-color);
 }
 
-/* ---------- Magazine article author card ---------- */
+/* ---------- Magazine article author card ----------
+   The source left-aligns the whole author block (headshot, name, role and
+   social icons) below a full-width grey separator line. */
 main .magazine-article-author {
   margin: 32px 0 0;
   padding: 24px 0 0;
   border-top: 1px solid rgb(235 235 235);
-  text-align: center;
+  text-align: left;
 }
 
 main .magazine-article-author-image {
@@ -513,7 +515,7 @@ main .magazine-article-author p {
    (background rgb(32 32 32), icon rgb(235 235 235)). */
 main .magazine-article-author-social {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0;
   margin: 16px 0 0;
 }
