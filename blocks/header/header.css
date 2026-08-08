@@ -206,7 +206,7 @@ header .nav-search-results a:hover {
 
 header nav .nav-sections ul {
   display: flex;
-  gap: 32px;
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -218,16 +218,24 @@ header nav .nav-sections li {
 
 /* stylelint-disable-next-line no-descending-specificity */
 header nav .nav-sections a {
+  display: block;
+  padding: 15px 17px;
   color: rgb(32 32 32);
   font-family: var(--body-font-family);
   font-size: 14px;
   font-weight: 400;
   text-transform: uppercase;
   text-decoration: none;
+  transition: background-color 0.2s ease;
 }
 
-header nav .nav-sections a:hover {
-  color: var(--link-color);
+/* Source fills the whole link with the WKND yellow on hover, and keeps the
+   current-section link filled (active page). Text stays dark. */
+header nav .nav-sections a:hover,
+header nav .nav-sections a:focus-visible,
+header nav .nav-sections a[aria-current="page"] {
+  background-color: rgb(255 234 0);
+  color: rgb(32 32 32);
 }
 
 /* Search */

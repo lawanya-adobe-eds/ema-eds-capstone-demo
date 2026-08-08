@@ -149,6 +149,23 @@ export default async function decorate(block) {
     if (section) section.classList.add(`nav-${c}`);
   });
 
+  // Mark the nav link for the current section as the active page (the source
+  // highlights it with the yellow pill; CSS keys off [aria-current="page"]).
+  // Match by the section root, e.g. /us/en/magazine and any /us/en/magazine/*.
+  const navSections = nav.querySelector('.nav-sections');
+  if (navSections) {
+    // Normalise both sides: drop a local "/content" preview prefix and any
+    // ".html"/trailing slash so the current path and nav hrefs are comparable.
+    const norm = (p) => p.replace(/^\/content/, '').replace(/\.html$/, '').replace(/\/$/, '');
+    const here = norm(window.location.pathname);
+    navSections.querySelectorAll('a').forEach((link) => {
+      const target = norm(new URL(link.href, window.location).pathname);
+      if (target && (here === target || here.startsWith(`${target}/`))) {
+        link.setAttribute('aria-current', 'page');
+      }
+    });
+  }
+
   // --- Brand: unwrap button class on the logo link ---
   const navBrand = nav.querySelector('.nav-brand');
   if (navBrand) {
