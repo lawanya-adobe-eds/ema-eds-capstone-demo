@@ -632,4 +632,13 @@ main .section.specs-container.tabs-adventure-container .default-content-wrapper 
   main .section.specs-container.tabs-adventure-container .specs dl {
     grid-template-columns: 1fr;
   }
+
+  /* Each spec pair carries a light-grey vertical accent line on its left edge
+     (5px, rgb(235 235 235), 18px padding). The source only shows this line in
+     the desktop two-column layout — on mobile/tablet the specs render without
+     it — so it is scoped to this breakpoint. */
+  main .section.specs-container.tabs-adventure-container .specs .specs-pair {
+    padding-left: 18px;
+    border-left: 5px solid rgb(235 235 235);
+  }
 }
