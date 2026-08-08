@@ -445,9 +445,12 @@ main .magazine-article-share li {
 
 /* Related-story link: uppercase title over a small grey uppercase date, matching
    the source. The title and date arrive as two consecutive text nodes; the
-   block JS wraps each so they can be styled and stacked. */
+   block JS wraps each so they can be styled and stacked. A 5px light-grey left
+   border draws the vertical accent line from the source. */
 main .magazine-article-share li a {
   display: block;
+  padding: 8px 0 8px 16px;
+  border-left: 5px solid rgb(235 235 235);
   text-decoration: none;
 }
 
