@@ -229,13 +229,25 @@ header nav .nav-sections a {
   transition: background-color 0.2s ease;
 }
 
-/* Source fills the whole link with the WKND yellow on hover, and keeps the
-   current-section link filled (active page). Text stays dark. */
-header nav .nav-sections a:hover,
-header nav .nav-sections a:focus-visible,
-header nav .nav-sections a[aria-current="page"] {
-  background-color: rgb(255 234 0);
-  color: rgb(32 32 32);
+/* Source fills the whole link with the WKND yellow on hover and keeps the
+   current-section link filled (active page) — but only on the desktop nav bar.
+   The source's mobile drawer shows no yellow, so this treatment is scoped to
+   >=900px (see the mobile block below). Text stays dark. */
+@media (width >= 900px) {
+  /* :hover is additionally gated to real pointer devices so a tap on a
+     touch/hybrid device doesn't leave a link "stuck" yellow. */
+  @media (hover: hover) {
+    header nav .nav-sections a:hover {
+      background-color: rgb(255 234 0);
+      color: rgb(32 32 32);
+    }
+  }
+
+  header nav .nav-sections a:focus-visible,
+  header nav .nav-sections a[aria-current="page"] {
+    background-color: rgb(255 234 0);
+    color: rgb(32 32 32);
+  }
 }
 
 /* Search */
