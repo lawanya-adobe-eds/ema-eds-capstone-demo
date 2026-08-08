@@ -11,8 +11,12 @@
   margin: 18px 0;
 }
 
+/* Each spec pair carries a light-grey vertical accent line on its left edge
+   (5px, rgb(235 235 235)), matching the source. */
 .specs .specs-pair {
   min-width: 0;
+  padding-left: 18px;
+  border-left: 5px solid rgb(235 235 235);
 }
 
 .specs dt {
