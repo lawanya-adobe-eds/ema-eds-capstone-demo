@@ -173,10 +173,6 @@ function buildMagazineArticle(main) {
   const section = shareHeading.closest('.section');
   if (!section || section.dataset.magazineArticle) return;
 
-  const relatedList = shareHeading.nextElementSibling
-    && shareHeading.nextElementSibling.tagName === 'UL'
-    ? shareHeading.nextElementSibling : null;
-
   const breadcrumb = section.querySelector('.breadcrumb-wrapper');
 
   const layout = document.createElement('div');
@@ -186,10 +182,24 @@ function buildMagazineArticle(main) {
   const aside = document.createElement('aside');
   aside.className = 'magazine-article-share';
 
-  // Move the share heading + related list into the sidebar. Each related link's
-  // text is "<Title> <Weekday, DD Mon YYYY>"; split it into a title line over a
-  // small grey date line (matching the source).
-  aside.append(shareHeading);
+  // The "Share this story" heading and everything after it (within its wrapper)
+  // form the sidebar: the heading, an optional "Download PDF" block, and the
+  // related-story list. Some articles (e.g. the LA skateparks guide) insert a
+  // Download PDF block between the heading and the list, so we can't assume the
+  // list is the heading's immediate sibling — move the whole tail, in order.
+  const shareNodes = [];
+  let shareNode = shareHeading;
+  while (shareNode) {
+    shareNodes.push(shareNode);
+    shareNode = shareNode.nextElementSibling;
+  }
+  shareNodes.forEach((node) => aside.append(node));
+
+  // Split each related-story link ("<Title> <Weekday, DD Mon YYYY>") into a
+  // title line over a small grey date line, matching the source. The related
+  // list is the one whose links point at other magazine articles.
+  const relatedList = [...aside.querySelectorAll('ul')]
+    .find((ul) => ul.querySelector('a[href*="/magazine/"]'));
   if (relatedList) {
     relatedList.querySelectorAll('a').forEach((link) => {
       const text = link.textContent.trim();
@@ -209,7 +219,6 @@ function buildMagazineArticle(main) {
         link.append(date);
       }
     });
-    aside.append(relatedList);
   }
 
   // Everything after the breadcrumb (h1, byline, body, author) becomes the
