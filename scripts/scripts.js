@@ -186,9 +186,31 @@ function buildMagazineArticle(main) {
   const aside = document.createElement('aside');
   aside.className = 'magazine-article-share';
 
-  // Move the share heading + related list into the sidebar.
+  // Move the share heading + related list into the sidebar. Each related link's
+  // text is "<Title> <Weekday, DD Mon YYYY>"; split it into a title line over a
+  // small grey date line (matching the source).
   aside.append(shareHeading);
-  if (relatedList) aside.append(relatedList);
+  if (relatedList) {
+    relatedList.querySelectorAll('a').forEach((link) => {
+      const text = link.textContent.trim();
+      const m = text.match(/^(.*?)\s+((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*,\s+.+)$/);
+      const [, matchedTitle, matchedDate] = m || [];
+      const titleText = matchedTitle || text;
+      const dateText = matchedDate || '';
+      link.textContent = '';
+      const title = document.createElement('span');
+      title.className = 'magazine-article-share-title';
+      title.textContent = titleText;
+      link.append(title);
+      if (dateText) {
+        const date = document.createElement('span');
+        date.className = 'magazine-article-share-date';
+        date.textContent = dateText;
+        link.append(date);
+      }
+    });
+    aside.append(relatedList);
+  }
 
   // Everything after the breadcrumb (h1, byline, body, author) becomes the
   // left article column; the lead image + breadcrumb stay full-width above.

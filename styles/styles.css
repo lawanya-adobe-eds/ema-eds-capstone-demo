@@ -440,19 +440,36 @@ main .magazine-article-share ul {
 }
 
 main .magazine-article-share li {
-  margin: 0 0 20px;
+  margin: 0 0 18px;
 }
 
+/* Related-story link: uppercase title over a small grey uppercase date, matching
+   the source. The title and date arrive as two consecutive text nodes; the
+   block JS wraps each so they can be styled and stacked. */
 main .magazine-article-share li a {
   display: block;
-  color: var(--text-color);
-  font-family: var(--heading-font-family);
-  font-size: 18px;
-  line-height: 1.3;
   text-decoration: none;
 }
 
-main .magazine-article-share li a:hover {
+main .magazine-article-share li a .magazine-article-share-title {
+  display: block;
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+main .magazine-article-share li a .magazine-article-share-date {
+  display: block;
+  margin-top: 2px;
+  color: rgb(105 105 105);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+main .magazine-article-share li a:hover .magazine-article-share-title {
   color: var(--link-color);
 }
 
@@ -489,29 +506,31 @@ main .magazine-article-author p {
   color: rgb(105 105 105);
 }
 
-/* social icon row */
+/* social icon row — dark 48x48 squares with a light glyph, matching the source
+   (background rgb(32 32 32), icon rgb(235 235 235)). */
 main .magazine-article-author-social {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  margin: 12px 0 0;
+  gap: 0;
+  margin: 16px 0 0;
 }
 
 main a.magazine-article-social-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
-  transition: opacity 0.2s ease;
+  width: 48px;
+  height: 48px;
+  background-color: rgb(32 32 32);
+  transition: background-color 0.2s ease;
 }
 
 main a.magazine-article-social-icon:hover {
-  opacity: 0.7;
+  background-color: rgb(64 64 64);
 }
 
 main a.magazine-article-social-icon svg {
   width: 18px;
   height: 18px;
-  fill: rgb(32 32 32);
+  fill: rgb(235 235 235);
 }
