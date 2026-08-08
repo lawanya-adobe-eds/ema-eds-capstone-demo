@@ -396,3 +396,122 @@ main .section.dark h5,
 main .section.dark h6 {
   color: #fff;
 }
+
+/* ---------- Magazine article layout ----------
+   Built at runtime by buildMagazineArticle() in scripts.js: the article body +
+   author card sit in the left column and a "Share this story" sidebar sits
+   parallel on the right (matching wknd.site). The lead image and breadcrumb
+   remain full-width above. Below 900px the sidebar drops below the article. */
+main .magazine-article-layout {
+  display: block;
+}
+
+@media (width >= 900px) {
+  main .magazine-article-layout {
+    display: grid;
+    grid-template-columns: 8fr 3fr;
+    column-gap: 64px;
+    align-items: start;
+  }
+
+  main .magazine-article-layout > .magazine-article-main {
+    min-width: 0;
+  }
+
+  main .magazine-article-layout > .magazine-article-share {
+    align-self: start;
+  }
+}
+
+/* "Share this story" sidebar */
+/* stylelint-disable-next-line no-descending-specificity */
+main .magazine-article-share h5 {
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+main .magazine-article-share ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+main .magazine-article-share li {
+  margin: 0 0 20px;
+}
+
+main .magazine-article-share li a {
+  display: block;
+  color: var(--text-color);
+  font-family: var(--heading-font-family);
+  font-size: 18px;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+main .magazine-article-share li a:hover {
+  color: var(--link-color);
+}
+
+/* ---------- Magazine article author card ---------- */
+main .magazine-article-author {
+  margin: 32px 0 0;
+  padding: 24px 0 0;
+  border-top: 1px solid rgb(235 235 235);
+  text-align: center;
+}
+
+main .magazine-article-author-image {
+  margin: 0;
+  line-height: 0;
+}
+
+main .magazine-article-author-image img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+main .magazine-article-author h2 {
+  margin: 12px 0 0;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+main .magazine-article-author p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: rgb(105 105 105);
+}
+
+/* social icon row */
+main .magazine-article-author-social {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 12px 0 0;
+}
+
+main a.magazine-article-social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  transition: opacity 0.2s ease;
+}
+
+main a.magazine-article-social-icon:hover {
+  opacity: 0.7;
+}
+
+main a.magazine-article-social-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: rgb(32 32 32);
+}
