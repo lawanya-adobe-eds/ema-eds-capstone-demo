@@ -1,18 +1,20 @@
 /* specs — adventure spec pairs: small uppercase label over a bold value. */
 
-/* Source lays the spec pairs out in a 3-column grid at all widths (including
-   mobile). Each label/value pair is one grid cell (.specs-pair) so the columns
-   stay aligned. On adventure detail pages the desktop two-column layout
-   overrides this to a single column inside the narrow sidebar (see styles.css). */
+/* Source lays the spec pairs out as content-width items that wrap: each pair
+   takes only as much width as its content plus a fixed trailing gap, so the
+   number per row grows with the viewport (3-up on mobile, all 6 on tablet).
+   On adventure detail pages the desktop two-column layout overrides this to a
+   single column inside the narrow sidebar (see styles.css). */
 .specs dl {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 23px;
   margin: 18px 0;
 }
 
 .specs .specs-pair {
   min-width: 0;
+  padding-right: 36px;
 }
 
 .specs dt {
