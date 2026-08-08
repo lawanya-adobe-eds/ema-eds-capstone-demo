@@ -105,7 +105,10 @@ h6 {
   scroll-margin: 40px;
 }
 
-h1 { font-size: var(--heading-font-size-xxl); }
+/* WKND page titles render at a constant 40px across all breakpoints (the
+   source does not scale the h1 responsively), so h1 uses a fixed size rather
+   than the responsive --heading-font-size-xxl token. */
+h1 { font-size: 40px; }
 h2 { font-size: var(--heading-font-size-xl); }
 h3 { font-size: var(--heading-font-size-l); }
 h4 { font-size: var(--heading-font-size-m); }
