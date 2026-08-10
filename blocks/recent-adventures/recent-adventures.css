@@ -74,8 +74,10 @@
   text-decoration: none;
 }
 
+/* No underline on hover — the source keeps card titles undecorated in all
+   states. */
 .recent-adventures .recent-adventures-card-body h3 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* Description: small grey uppercase copy, clamped to one ellipsised line. */
