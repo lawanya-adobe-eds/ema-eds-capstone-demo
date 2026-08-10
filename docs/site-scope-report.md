@@ -208,6 +208,20 @@ Three behaviors are data-driven rather than static content:
 All three blocks contain **zero hardcoded content** — they fetch, filter, and
 render from the index, so authoring is entirely a content-side activity.
 
+**Where a query-index approach does *not* apply — About Us contributors.** The
+query index has one row per *published page*; it aggregates pages, it cannot
+aggregate rows *within* a page. The About Us "Our Contributors" (4) and "WKND
+Guides" (3) people are inline `cards-people` content on the single About Us doc,
+not separate pages, so there is nothing for an index to collect. Making them
+query-driven would require promoting each contributor to its own standalone,
+publicly-routable page (which would also surface them in the header search) —
+a structural change that alters the site's information architecture, not just a
+rendering optimization. The idiomatic EDS pattern for one-off page content is to
+author it in the doc, which is already fully author-friendly: an author adds,
+edits, reorders, or removes a contributor (headshot, name, role, social links,
+and which group they belong to) directly in the About Us document with no code
+change. It is therefore intentionally left authored (see §7).
+
 ---
 
 ## 7. Scope Boundaries & Deviations
@@ -225,6 +239,13 @@ templates, all blocks, header/footer/nav, listings, and search.
   the public migration.
 
 **Design deviations (intentional, documented):**
+- **About Us contributors kept authored, not query-indexed** — the contributor
+  grids are inline page content rather than separate pages, so a query index has
+  nothing to aggregate (it indexes pages, not intra-page rows). Making them
+  dynamic would mean promoting each of the 7 people to a standalone public page
+  and changing the site's information architecture. Left as authored
+  `cards-people` content, which is already fully author-editable in the doc (see
+  §6). No visual/behavioral difference from the source.
 - Social marks use portable inline SVG icons in place of the source's
   proprietary `wknd-icon-font`, styled to match the source's exact size/colors.
 - Some source layouts built on AEM's 12-column grid are reproduced with CSS
