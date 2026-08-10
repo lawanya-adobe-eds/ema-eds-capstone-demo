@@ -1,21 +1,24 @@
 /* recent-adventures — dynamic homepage "Where do you want to go?" adventures
-   grid built from the query index. Visual design matches the cards-teaser block
-   it replaces: 13:10 image tiles, an uppercase dark bold title, and a single
-   grey uppercase description line. Mobile-first single column, widening to 2-up
-   at 600px and 4-up at 900px. */
+   grid built from the query index. Visual design matches the wknd.site source
+   card grid (the same image-list component as Recent Articles): fixed 260x200
+   image tiles, a blue sentence-case title link, and a single grey uppercase
+   description line. Mobile shows one 260px card centered with side gutters (like
+   the source), widening to 2-up at 600px and 4-up at 900px. */
 
 .recent-adventures > ul {
-  list-style: none;
+  display: grid;
+  grid-template-columns: 260px;
+  justify-content: center;
+  gap: 32px 14px;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 32px 14px;
+  list-style: none;
 }
 
 @media (width >= 600px) {
   .recent-adventures > ul {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: normal;
   }
 }
 
@@ -35,7 +38,7 @@
   background: none;
 }
 
-/* Image on top, cropped to the source's 13:10 tile. */
+/* Image on top, cropped to the source's fixed 260x200 tile. */
 .recent-adventures .recent-adventures-card-image {
   display: block;
   line-height: 0;
@@ -44,7 +47,7 @@
 .recent-adventures .recent-adventures-card-image img {
   display: block;
   width: 100%;
-  aspect-ratio: 13 / 10;
+  height: 200px;
   object-fit: cover;
 }
 
@@ -53,20 +56,19 @@
   padding: 0;
 }
 
-/* Title: body font, uppercase, semi-bold, dark text (matches source; overrides
-   the global serif h3). */
+/* Title: blue sentence-case link, body font, regular weight (matches source;
+   overrides the global serif h3). */
 .recent-adventures .recent-adventures-card-body h3 {
-  margin: 10px 0 0;
+  margin: 0;
   font-family: var(--body-font-family);
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 27px;
-  text-transform: uppercase;
-  color: var(--text-color);
+  text-transform: none;
 }
 
 .recent-adventures .recent-adventures-card-body h3 a:any-link {
-  color: var(--text-color);
+  color: var(--link-color);
   font: inherit;
   text-decoration: none;
 }

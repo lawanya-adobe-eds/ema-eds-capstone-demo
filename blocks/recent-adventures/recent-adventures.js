@@ -6,9 +6,9 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
  * Mirrors the recent-articles block, but for adventure detail pages: it fetches
  * the published query index (/us/en/query-index.json) and renders a capped set
  * of adventure cards. New adventure pages appear automatically once indexed — no
- * re-authoring of the homepage needed. Visual design matches the cards-teaser
- * block it replaces (13:10 image tiles, uppercase dark title, single-line grey
- * description, 4-up grid).
+ * re-authoring of the homepage needed. Visual design matches the wknd.site source
+ * grid (the same image-list component as Recent Articles): 260x200 image tiles, a
+ * blue sentence-case title link, a single-line grey description, and a 4-up grid.
  */
 
 // How many cards the homepage shows (matches the source's curated count).
@@ -46,12 +46,12 @@ function buildCard(item) {
   imageLink.href = withPrefix(item.path);
   if (item.image) {
     const pic = createOptimizedPicture(item.image, item.title, false, [{ width: '750' }]);
-    // Reserve layout space to prevent CLS. 650x500 matches the 13:10 ratio the
-    // CSS enforces (width:100%; aspect-ratio:13/10; object-fit:cover) — sizing
-    // hint only, no visual change.
+    // Reserve layout space to prevent CLS. Card image renders at a fixed 200px
+    // height, full-width, object-fit:cover; 260x200 matches the source card
+    // ratio — sizing hint only, no visual change.
     const img = pic.querySelector('img');
-    img.setAttribute('width', '650');
-    img.setAttribute('height', '500');
+    img.setAttribute('width', '260');
+    img.setAttribute('height', '200');
     imageLink.append(pic);
   }
 
