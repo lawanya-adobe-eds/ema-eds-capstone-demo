@@ -300,6 +300,17 @@ shrinking inline emphasis in body copy site-wide).
   the public migration.
 
 **Design deviations (intentional, documented):**
+- **Header / search / carousel / footer refinements to match the source.** The
+  desktop header height was raised to the source's 194px (nav vertical padding
+  62px; the `--nav-height` CLS reservation updated to 194px desktop, mobile
+  unchanged at 77px). The header search magnifier is a 20px masked-SVG icon
+  (matching the source glyph size). The carousel prev/next and footer social
+  marks use CSS/inline-SVG in place of the source's proprietary `wknd-icon-font`
+  (which we don't embed) — the carousel arrows are a CSS chevron tuned to the
+  source's thin arrows; the footer social icons are 48×48 light-grey squares
+  with dark inline-SVG glyphs, and "Follow Us" sits inline to the left of the
+  icon row (matching the source), replacing the earlier stacked layout. Verified
+  live desktop/mobile; CLS ~0.007 (no shift added).
 - **About Us contributors kept authored, not query-indexed** — the contributor
   grids are inline page content rather than separate pages, so a query index has
   nothing to aggregate (it indexes pages, not intra-page rows). Making them
