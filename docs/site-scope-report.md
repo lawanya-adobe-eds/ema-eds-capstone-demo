@@ -21,8 +21,8 @@ what content was imported.
 |---|---|
 | Page templates identified | 6 |
 | Content pages imported | 26 (content) + 3 (site config: nav, footer, index) |
-| Blocks implemented | 20 |
-| — mapped to a source template | 12 |
+| Blocks implemented | 21 |
+| — mapped to a source template | 13 |
 | — boilerplate/global/utility | 8 |
 | Import parsers | 10 |
 | Import transformers | 5 |
@@ -42,7 +42,7 @@ transformers and CSS.
 
 | # | Template | Representative source page | Blocks | Pages using it |
 |---|----------|----------------------------|--------|----------------|
-| 1 | **homepage** | `/us/en` | carousel-hero, columns-featured, cards-teaser, hero-overlay | 1 |
+| 1 | **homepage** | `/us/en` | carousel-hero, columns-featured, recent-articles, cards-teaser, hero-overlay | 1 |
 | 2 | **landing-overview** | `/us/en/magazine`, `/us/en/about-us` | columns-featured, cards-teaser, cards-people, magazine-listing | 2 |
 | 3 | **adventures-listing** | `/us/en/adventures` | hero-overlay, adventures-listing | 1 |
 | 4 | **adventure-detail** | `/us/en/adventures/bali-surf-camp` | breadcrumb, carousel-gallery, specs, tabs-adventure | 16 |
@@ -56,6 +56,10 @@ transformers and CSS.
   `magazine-listing` + `cards-teaser`.
 - **adventure-detail** is the highest-volume template (16 pages) — the specs
   sidebar + adventure tabs layout is shared across all of them.
+- The **homepage** "Recent Articles" grid (the first of the page's two
+  `cards-teaser` grids) is **query-index driven** via the `recent-articles`
+  block; the second grid ("Where do you want to go?") stays a static
+  `cards-teaser`.
 - Listing pages (Adventures, Magazine) are **query-index driven** (see §6).
 
 ---
@@ -78,6 +82,7 @@ transformers and CSS.
 | `quote-editorial` | Pull-quote inside article body | magazine-article | — |
 | `accordion-faq` | Expandable Q&A accordion | faq | — |
 | `adventures-listing` | Query-index-driven adventure card grid + category filter | adventures-listing | — |
+| `recent-articles` | Query-index-driven homepage "Recent Articles" magazine card grid (capped at 4) | homepage | — |
 
 *The source authors these via AEM Core Components with a single visual style per
 component, so no explicit block **class variants** were required — one CSS
@@ -174,7 +179,7 @@ site-level transformers (no hand-authored HTML in `content/`).
 |-------------|----------------|
 | `wknd-cleanup` | Strip source chrome/wrappers, normalize markup |
 | `wknd-buttons` | Convert CTAs to EDS button/strong conventions (yellow pill CTAs) |
-| `wknd-listings` | Prepare Adventures/Magazine listings for query-index blocks |
+| `wknd-listings` | Swap static card grids for query-index blocks — Adventures (`adventures-listing`), Magazine (`magazine-listing`), and the homepage's first grid (`recent-articles`) |
 | `wknd-members-teasers` | Members-Only secure teaser cards (Magazine) |
 | `wknd-specs` | Adventure spec pairs → specs block |
 
@@ -182,15 +187,26 @@ site-level transformers (no hand-authored HTML in `content/`).
 
 ## 6. Dynamic Behaviors
 
-Two behaviors are data-driven rather than static content:
+Three behaviors are data-driven rather than static content:
 
 1. **Query-index-driven listings** — The Adventures and Magazine listing pages
    render their card grids from `/us/en/query-index.json` (config in
    `helix-query.yaml`). Adventure category (Activity spec) is indexed so the
-   Current Adventures tabs can filter client-side. Adding a new adventure/article
-   page automatically appears in the listing once published — no listing edit.
-2. **On-demand header search** — The global header's live-suggest search reads
+   Current Adventures tabs can filter client-side, and the tab set itself is
+   derived from the indexed categories. Adding a new adventure/article page makes
+   it appear in the listing once published — no listing edit; a new activity even
+   spawns its own filter tab automatically. Verified end-to-end (publish a new
+   page → it enters the index → the block renders it, with the source page left
+   untouched).
+2. **Query-index-driven homepage "Recent Articles"** — The homepage's first card
+   grid is rendered by the `recent-articles` block from the same query index,
+   filtered to magazine articles and capped at 4 cards. New articles surface
+   automatically on publish with no homepage re-authoring.
+3. **On-demand header search** — The global header's live-suggest search reads
    the same query-index to surface matching pages as the user types.
+
+All three blocks contain **zero hardcoded content** — they fetch, filter, and
+render from the index, so authoring is entirely a content-side activity.
 
 ---
 
