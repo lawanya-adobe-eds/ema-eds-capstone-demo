@@ -29,10 +29,10 @@
 .accordion-faq details summary p {
   margin: 0;
   color: #000;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.2;
-  text-transform: uppercase;
+  font-family: var(--heading-font-family); /* source: FAQ questions are Asar headings */
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.5;
 }
 
 /* Source removes the header underline while the item is open. */

@@ -67,7 +67,7 @@
 .cards-people .cards-people-card-body h3 {
   margin: 0;
   font-family: var(--heading-font-family);
-  font-size: 20px;
+  font-size: 24px; /* source: contributor name is Asar 24px */
   font-weight: 400;
   color: var(--text-color);
 }

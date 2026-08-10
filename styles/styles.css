@@ -429,11 +429,13 @@ main .magazine-article-layout {
   display: block;
 }
 
-/* Article body paragraphs use the source's distinctive loose leading (45px at
-   18px = 2.5), scoped to the article body's default-content run (not the byline
-   or the share sidebar). The author-card role text lives in this run too and is
-   also 2.5 on the source, so matching it here is correct. */
-main .magazine-article-main > .default-content-wrapper p {
+/* Authored body paragraphs use the source's distinctive loose leading
+   (e.g. 45px at 18px = 2.5). The source applies this to default-content
+   paragraphs across content pages (article bodies, the FAQ intro/"Need more
+   help", the About Us group intros). Scoped to paragraphs in default-content
+   wrappers so block-authored copy (card descriptions, featured teaser, footer)
+   keeps its own leading. */
+main .default-content-wrapper p {
   line-height: 2.5;
 }
 
@@ -458,6 +460,7 @@ main .magazine-article-main > .default-content-wrapper p {
 /* stylelint-disable-next-line no-descending-specificity */
 main .magazine-article-share h5 {
   margin: 0 0 16px;
+  font-family: var(--body-font-family); /* source: "Share this" is Source Sans Pro, not Asar */
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
@@ -588,6 +591,14 @@ main .section.specs-container.tabs-adventure-container .default-content-wrapper 
   width: 84px;
   margin-top: 8px;
   border-bottom: 2px solid rgb(255 234 0);
+}
+
+/* "Share this Adventure" heading: the source renders it as a small Source Sans
+   Pro label (14px/600), not the Asar 18px the global h5 rule applies. */
+main .section.specs-container.tabs-adventure-container .default-content-wrapper > h5 {
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 600;
 }
 
 @media (width >= 900px) {
