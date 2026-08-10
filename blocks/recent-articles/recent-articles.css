@@ -4,9 +4,13 @@
    uppercase description line. Mobile shows one 260px card centered with side
    gutters (like the source), widening to 2-up at 600px and 4-up at 900px. */
 
+/* Fixed 260px tiles that wrap and left-align (matching the source's
+   flex-wrap of fixed-width cards), so the 260x200 image ratio is preserved and
+   cards never stretch to fill the row. Mobile centres one card; from 600px the
+   tiles left-align and wrap 2-up, then 4-up at 900px. */
 .recent-articles > ul {
-  display: grid;
-  grid-template-columns: 260px;
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 32px 14px;
   margin: 0;
@@ -16,19 +20,14 @@
 
 @media (width >= 600px) {
   .recent-articles > ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    justify-content: normal;
+    justify-content: flex-start;
   }
 }
 
-@media (width >= 900px) {
-  .recent-articles > ul {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-/* Flat cards — no border, background, shadow or radius in the source. */
+/* Flat cards — fixed 260px width, no border/background/shadow/radius (source). */
 .recent-articles > ul > li {
+  flex: 0 0 260px;
+  max-width: 260px;
   display: flex;
   flex-direction: column;
   margin: 0;
