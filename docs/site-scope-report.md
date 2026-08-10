@@ -273,8 +273,18 @@ with headings/blockquote/featured-description already matching. A responsive
 size gap was also closed: the source keeps h2 at 36px at every breakpoint, but
 the mobile-first `--heading-font-size-xl` token was 28px, shrinking generic h2s
 (e.g. article section headings) below 900px — set to 36px so h2 matches at all
-widths. Verified live at desktop (1440), tablet (768) and mobile (375) on both
-homepage and article templates; CLS remained ~0.007 (edits added no shift).
+widths. Auditing the remaining templates (FAQ, About Us, adventure-detail)
+closed a further set of gaps: FAQ questions now render as Asar 24px headings
+(were Source Sans Pro 16px uppercase); About Us contributor names are Asar 24px
+(were 20px); the "Share this story"/"Share this Adventure" sub-headings are
+Source Sans Pro 14px/600 (were inheriting Asar); and the loose 2.5 body-paragraph
+leading now applies to all default-content paragraphs (FAQ intro/"Need more
+help", About Us group intros), matching the source. Verified live at desktop
+(1440), tablet (768) and mobile (375) across homepage, article, FAQ, About Us,
+adventure-detail and magazine-listing templates; CLS remained ~0.007 (edits
+added no shift). Minor known residual: a couple of `<em>`-wrapped intro
+paragraphs render at 18px vs the source's 14px — left as-is (matching would risk
+shrinking inline emphasis in body copy site-wide).
 
 **Out of scope / not migrated:**
 - **Other locales** — WKND publishes additional locale trees (e.g. `ca/en`,
