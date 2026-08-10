@@ -10,6 +10,7 @@ import heroOverlayParser from './parsers/hero-overlay.js';
 // TRANSFORMER IMPORTS
 import wkndButtonsTransformer from './transformers/wknd-buttons.js';
 import wkndCleanupTransformer from './transformers/wknd-cleanup.js';
+import wkndListingsTransformer from './transformers/wknd-listings.js';
 
 // PARSER REGISTRY
 const parsers = {
@@ -23,6 +24,7 @@ const parsers = {
 const transformers = [
   wkndButtonsTransformer,
   wkndCleanupTransformer,
+  wkndListingsTransformer,
 ];
 
 // PAGE TEMPLATE CONFIGURATION - Embedded from page-templates.json

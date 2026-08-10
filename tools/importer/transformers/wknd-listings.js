@@ -18,6 +18,9 @@
  *     becomes a `magazine-listing` block seeded with an "All Articles" heading.
  *     Any later `cards-teaser` table (e.g. the static "Members Only" teasers) is
  *     left untouched.
+ *   - Homepage: the FIRST `cards-teaser` table (the "Recent Articles" magazine
+ *     grid) becomes a `recent-articles` block. The SECOND `cards-teaser` (the
+ *     "Where do you want to go?" adventures grid) is left static.
  *
  * Runs on afterTransform, once the parsers have emitted the block tables.
  */
@@ -70,5 +73,13 @@ export default function transform(hookName, element, payload) {
     // carries no heading of its own (avoids a duplicate heading).
     const grid = tables.find((t) => isBlock(t, 'cards-teaser'));
     if (grid) grid.replaceWith(createMarker(document, 'magazine-listing'));
+  } else if (/\/us\/en(\.html)?$/.test(path)) {
+    // Homepage: replace only the FIRST cards-teaser (the "Recent Articles"
+    // magazine grid) with a dynamic recent-articles block. The SECOND
+    // cards-teaser ("Where do you want to go?" adventures grid) stays static.
+    // The authored "Recent Articles" <h2> immediately precedes this grid, so the
+    // marker carries no heading of its own (avoids a duplicate heading).
+    const grid = tables.find((t) => isBlock(t, 'cards-teaser'));
+    if (grid) grid.replaceWith(createMarker(document, 'recent-articles'));
   }
 }
