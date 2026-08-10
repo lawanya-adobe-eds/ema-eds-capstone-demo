@@ -209,11 +209,14 @@ published index (`/us/en/query-index.json`, config in `helix-query.yaml`):
    publish with no homepage re-authoring.
 3. **Query-index-driven homepage "Where do you want to go?"** — The homepage's
    second card grid is rendered by the `recent-adventures` block (mirror of
-   `recent-articles`, for adventure pages), capped at 4, with 260×200 image
-   tiles. Both homepage card grids use uppercase dark (rgb 32,32,32) semi-bold
-   title labels with no link styling — consistent with the Adventures/Magazine
-   listing cards and the reference render. Verified against the source at desktop,
-   tablet (2-up), and mobile (1-up).
+   `recent-articles`, for adventure pages), capped at 4. Both homepage card grids
+   match the source's `image-list` structure and styling: fixed 260×200 image
+   tiles laid out with `flex-wrap` (fixed-width cards that wrap and left-align,
+   not a fluid grid that stretches them — this keeps the 1.30 image ratio);
+   uppercase dark (rgb 32,32,32) semi-bold title labels with no link styling and
+   no underline on hover — consistent with the Adventures/Magazine listing cards
+   and the reference render. Verified against the source at desktop (4-up),
+   tablet (2-up), and mobile (1-up centred).
 4. **Query-index-driven magazine "Share this story"** — The `related-articles`
    block replaces the article sidebar's related-stories list, which was hardcoded
    per page (stale, and sometimes self-referential — some source articles linked
