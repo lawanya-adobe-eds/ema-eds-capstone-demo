@@ -271,6 +271,18 @@ templates, all blocks, header/footer/nav, listings, and search.
   the public migration.
 
 **Design deviations (intentional, documented):**
+- **Typography vs. source — font family & size match; line-height differs
+  slightly.** A full type-scale audit against wknd.site confirmed font-family
+  (Source Sans Pro body / Asar headings) and font-size match across all element
+  types on every template. One real mismatch was found and fixed: the magazine
+  article byline (`<h4>` after the `<h1>`, e.g. "By Jacob Wester") was rendering
+  as the global Asar 20px heading; it now matches the source's Source Sans Pro
+  16px/600 label (scoped via `main h1 + h4`). Remaining known deviation:
+  line-heights use the boilerplate's unitless multipliers (body ~1.6, headings
+  1.5) rather than the source's fixed values (e.g. body 27px, article paragraphs
+  45px, nav 21px, footer 15px). Left as-is by decision — it's a spacing nuance,
+  not a font family/size difference, and the current values are close and
+  readable; matching them exactly would shift vertical rhythm site-wide.
 - **About Us contributors kept authored, not query-indexed** — the contributor
   grids are inline page content rather than separate pages, so a query index has
   nothing to aggregate (it indexes pages, not intra-page rows). Making them
