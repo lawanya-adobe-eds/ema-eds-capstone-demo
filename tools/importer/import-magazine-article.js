@@ -7,6 +7,7 @@ import quoteEditorialParser from './parsers/quote-editorial.js';
 
 // TRANSFORMER IMPORTS
 import wkndCleanupTransformer from './transformers/wknd-cleanup.js';
+import wkndMagazineArticleTransformer from './transformers/wknd-magazine-article.js';
 
 // PARSER REGISTRY
 const parsers = {
@@ -17,7 +18,47 @@ const parsers = {
 // TRANSFORMER REGISTRY
 const transformers = [
   wkndCleanupTransformer,
+  wkndMagazineArticleTransformer,
 ];
+
+// Per-article editorial publish dates (ISO YYYY-MM-DD), cross-referenced from
+// the source's "Share this story" lists (the date is otherwise only baked into
+// link text). Appended as a "Publish Date" row to the generated Metadata block
+// so it publishes as <meta name="publish-date">, which helix-query.yaml indexes
+// as `publishDate` for the dynamic related-articles block to render + sort.
+const PUBLISH_DATES = {
+  'arctic-surfing': '2020-07-09',
+  'san-diego-surf': '2020-07-09',
+  'western-australia': '2020-07-09',
+  'ski-touring': '2020-09-30',
+  'guide-la-skateparks': '2020-09-30',
+};
+
+/**
+ * Append a "Publish Date" row to the Metadata block table (the last table whose
+ * first cell reads "Metadata"). Runs AFTER WebImporter.rules.createMetadata,
+ * which builds that block but only from a fixed set of source meta tags.
+ * @param {Element} main
+ * @param {Document} document
+ * @param {string} slug article slug (e.g. "arctic-surfing")
+ */
+function appendPublishDate(main, document, slug) {
+  const iso = PUBLISH_DATES[slug];
+  if (!iso) return;
+  const metaTable = [...main.querySelectorAll('table')].reverse().find((t) => {
+    const first = t.querySelector('tr th, tr td');
+    return first && first.textContent.trim().toLowerCase() === 'metadata';
+  });
+  if (!metaTable) return;
+  const body = metaTable.querySelector('tbody') || metaTable;
+  const row = document.createElement('tr');
+  const label = document.createElement('td');
+  label.textContent = 'Publish Date';
+  const value = document.createElement('td');
+  value.textContent = iso;
+  row.append(label, value);
+  body.append(row);
+}
 
 // PAGE TEMPLATE CONFIGURATION - Embedded from page-templates.json
 const PAGE_TEMPLATE = {
@@ -102,6 +143,11 @@ export default {
     const path = WebImporter.FileUtils.sanitizePath(
       new URL(params.originalURL).pathname.replace(/\/$/, '').replace(/\.html$/, ''),
     );
+
+    // Add the editorial "Publish Date" row to the Metadata block (after
+    // createMetadata built it). Slug derived from the sanitized path.
+    const slug = (path.match(/\/magazine\/([^/]+)$/) || [])[1] || '';
+    appendPublishDate(main, document, slug);
 
     return [{
       element: main,

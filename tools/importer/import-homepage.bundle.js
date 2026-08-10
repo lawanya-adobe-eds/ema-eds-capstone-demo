@@ -231,8 +231,9 @@ var CustomImportScript = (() => {
       const grid = tables.find((t) => isBlock(t, "cards-teaser"));
       if (grid) grid.replaceWith(createMarker(document, "magazine-listing"));
     } else if (/\/us\/en(\.html)?$/.test(path)) {
-      const grid = tables.find((t) => isBlock(t, "cards-teaser"));
-      if (grid) grid.replaceWith(createMarker(document, "recent-articles"));
+      const grids = tables.filter((t) => isBlock(t, "cards-teaser"));
+      if (grids[0]) grids[0].replaceWith(createMarker(document, "recent-articles"));
+      if (grids[1]) grids[1].replaceWith(createMarker(document, "recent-adventures"));
     }
   }
 

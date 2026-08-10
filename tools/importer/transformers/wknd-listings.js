@@ -74,12 +74,13 @@ export default function transform(hookName, element, payload) {
     const grid = tables.find((t) => isBlock(t, 'cards-teaser'));
     if (grid) grid.replaceWith(createMarker(document, 'magazine-listing'));
   } else if (/\/us\/en(\.html)?$/.test(path)) {
-    // Homepage: replace only the FIRST cards-teaser (the "Recent Articles"
-    // magazine grid) with a dynamic recent-articles block. The SECOND
-    // cards-teaser ("Where do you want to go?" adventures grid) stays static.
-    // The authored "Recent Articles" <h2> immediately precedes this grid, so the
-    // marker carries no heading of its own (avoids a duplicate heading).
-    const grid = tables.find((t) => isBlock(t, 'cards-teaser'));
-    if (grid) grid.replaceWith(createMarker(document, 'recent-articles'));
+    // Homepage: two cards-teaser grids become dynamic, query-index blocks. The
+    // FIRST ("Recent Articles" magazine grid) → recent-articles; the SECOND
+    // ("Where do you want to go?" adventures grid) → recent-adventures. Each has
+    // an authored <h2>/<h3> heading immediately before it, so the markers carry
+    // no heading of their own (avoids duplicate headings).
+    const grids = tables.filter((t) => isBlock(t, 'cards-teaser'));
+    if (grids[0]) grids[0].replaceWith(createMarker(document, 'recent-articles'));
+    if (grids[1]) grids[1].replaceWith(createMarker(document, 'recent-adventures'));
   }
 }

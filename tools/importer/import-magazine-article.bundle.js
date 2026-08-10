@@ -136,14 +136,63 @@ var CustomImportScript = (() => {
     }
   }
 
+  // tools/importer/transformers/wknd-magazine-article.js
+  var TransformHook2 = { beforeTransform: "beforeTransform", afterTransform: "afterTransform" };
+  function createMarker(document, name) {
+    return WebImporter.DOMUtils.createTable([[name]], document);
+  }
+  function swapRelatedList(element, document) {
+    const lists = [...element.querySelectorAll("ul")];
+    const relatedList = lists.find((ul) => ul.querySelector('a[href*="/magazine/"]'));
+    if (relatedList) relatedList.replaceWith(createMarker(document, "related-articles"));
+  }
+  function transform2(hookName, element, payload) {
+    if (hookName !== TransformHook2.afterTransform) return;
+    const url = payload.params && payload.params.originalURL || payload.url || "";
+    const path = (() => {
+      try {
+        return new URL(url).pathname;
+      } catch (e) {
+        return String(url);
+      }
+    })();
+    if (!/\/magazine\/[^/.]+(\.html)?$/.test(path)) return;
+    swapRelatedList(element, payload.document);
+  }
+
   // tools/importer/import-magazine-article.js
   var parsers = {
     breadcrumb: parse,
     "quote-editorial": parse2
   };
   var transformers = [
-    transform
+    transform,
+    transform2
   ];
+  var PUBLISH_DATES = {
+    "arctic-surfing": "2020-07-09",
+    "san-diego-surf": "2020-07-09",
+    "western-australia": "2020-07-09",
+    "ski-touring": "2020-09-30",
+    "guide-la-skateparks": "2020-09-30"
+  };
+  function appendPublishDate(main, document, slug) {
+    const iso = PUBLISH_DATES[slug];
+    if (!iso) return;
+    const metaTable = [...main.querySelectorAll("table")].reverse().find((t) => {
+      const first = t.querySelector("tr th, tr td");
+      return first && first.textContent.trim().toLowerCase() === "metadata";
+    });
+    if (!metaTable) return;
+    const body = metaTable.querySelector("tbody") || metaTable;
+    const row = document.createElement("tr");
+    const label = document.createElement("td");
+    label.textContent = "Publish Date";
+    const value = document.createElement("td");
+    value.textContent = iso;
+    row.append(label, value);
+    body.append(row);
+  }
   var PAGE_TEMPLATE = {
     name: "magazine-article",
     description: "WKND magazine article: lead image, breadcrumb, long-form editorial body with a pull-quote block, author byline, and related-stories sidebar.",
@@ -211,6 +260,8 @@ var CustomImportScript = (() => {
       const path = WebImporter.FileUtils.sanitizePath(
         new URL(params.originalURL).pathname.replace(/\/$/, "").replace(/\.html$/, "")
       );
+      const slug = (path.match(/\/magazine\/([^/]+)$/) || [])[1] || "";
+      appendPublishDate(main, document, slug);
       return [{
         element: main,
         path,

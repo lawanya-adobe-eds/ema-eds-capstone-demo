@@ -1,0 +1,90 @@
+/* recent-adventures — dynamic homepage "Where do you want to go?" adventures
+   grid built from the query index. Visual design matches the cards-teaser block
+   it replaces: 13:10 image tiles, an uppercase dark bold title, and a single
+   grey uppercase description line. Mobile-first single column, widening to 2-up
+   at 600px and 4-up at 900px. */
+
+.recent-adventures > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px 14px;
+}
+
+@media (width >= 600px) {
+  .recent-adventures > ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 900px) {
+  .recent-adventures > ul {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Flat cards — no border, background, shadow or radius in the source. */
+.recent-adventures > ul > li {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+/* Image on top, cropped to the source's 13:10 tile. */
+.recent-adventures .recent-adventures-card-image {
+  display: block;
+  line-height: 0;
+}
+
+.recent-adventures .recent-adventures-card-image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 13 / 10;
+  object-fit: cover;
+}
+
+.recent-adventures .recent-adventures-card-body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Title: body font, uppercase, semi-bold, dark text (matches source; overrides
+   the global serif h3). */
+.recent-adventures .recent-adventures-card-body h3 {
+  margin: 10px 0 0;
+  font-family: var(--body-font-family);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 27px;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+
+.recent-adventures .recent-adventures-card-body h3 a:any-link {
+  color: var(--text-color);
+  font: inherit;
+  text-decoration: none;
+}
+
+.recent-adventures .recent-adventures-card-body h3 a:hover {
+  text-decoration: underline;
+}
+
+/* Description: small grey uppercase copy, clamped to one ellipsised line. */
+.recent-adventures .recent-adventures-card-body p {
+  margin: 16px 0 0;
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  text-transform: uppercase;
+  color: rgb(105 105 105);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

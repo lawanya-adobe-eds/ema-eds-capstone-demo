@@ -197,8 +197,11 @@ function buildMagazineArticle(main) {
 
   // Split each related-story link ("<Title> <Weekday, DD Mon YYYY>") into a
   // title line over a small grey date line, matching the source. The related
-  // list is the one whose links point at other magazine articles.
+  // list is the one whose links point at other magazine articles. Lists inside
+  // a `related-articles` block are skipped — that block renders the split spans
+  // itself (and does so asynchronously, so it may not exist yet here).
   const relatedList = [...aside.querySelectorAll('ul')]
+    .filter((ul) => !ul.closest('.related-articles'))
     .find((ul) => ul.querySelector('a[href*="/magazine/"]'));
   if (relatedList) {
     relatedList.querySelectorAll('a').forEach((link) => {
