@@ -50,7 +50,7 @@
   font-family: var(--body-font-family);
   font-size: 18px;
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 2.5; /* match source pretitle leading (45px at 18px) */
   color: var(--text-color);
 }
 

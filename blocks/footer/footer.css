@@ -132,7 +132,7 @@ footer .footer-legal {
 footer .footer-legal p {
   margin: 0 0 8px;
   font-size: 12px;
-  line-height: 1.6;
+  line-height: 1.25; /* match source footer legal leading (15px at 12px) */
 }
 
 /* stylelint-disable-next-line no-descending-specificity */

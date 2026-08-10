@@ -76,7 +76,7 @@ body {
   color: var(--text-color);
   font-family: var(--body-font-family);
   font-size: var(--body-font-size-m);
-  line-height: 1.6;
+  line-height: 1.5; /* match source default body leading (27px at 18px) */
 }
 
 body.appear {
@@ -426,6 +426,14 @@ main .magazine-article-layout {
   display: block;
 }
 
+/* Article body paragraphs use the source's distinctive loose leading (45px at
+   18px = 2.5), scoped to the article body's default-content run (not the byline
+   or the share sidebar). The author-card role text lives in this run too and is
+   also 2.5 on the source, so matching it here is correct. */
+main .magazine-article-main > .default-content-wrapper p {
+  line-height: 2.5;
+}
+
 @media (width >= 900px) {
   main .magazine-article-layout {
     display: grid;
@@ -525,6 +533,7 @@ main .magazine-article-author h2 {
   font-weight: 400;
 }
 
+/* stylelint-disable-next-line no-descending-specificity */
 main .magazine-article-author p {
   margin: 4px 0 0;
   font-size: 14px;
