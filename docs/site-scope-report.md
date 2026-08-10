@@ -21,9 +21,9 @@ what content was imported.
 |---|---|
 | Page templates identified | 6 |
 | Content pages imported | 26 (content) + 3 (site config: nav, footer, index) |
-| Blocks implemented | 23 |
+| Blocks implemented | 24 |
 | — mapped to a source template | 15 |
-| — boilerplate/global/utility | 8 |
+| — boilerplate/global/utility | 9 |
 | Import parsers | 10 |
 | Import transformers | 6 |
 | Locales in scope (migrated) | 1 (`/us/en`) |
@@ -105,6 +105,7 @@ declared variant class.*
 | `columns` | Boilerplate columns (retained) |
 | `hero` | Boilerplate hero (retained) |
 | `widget` | Boilerplate widget (retained) |
+| `library-metadata` | No-op block for the DA Block Library demo pages; holds each block's name/description for the Library UI and is removed on the rendered site (see §9) |
 
 ---
 
@@ -313,3 +314,29 @@ tablet, and mobile:
 **Quality bar:** each template was validated against the source at desktop
 (1440), tablet (768), and mobile (375) for visual fidelity, responsiveness, and
 zero horizontal overflow, and meets Core Web Vitals per EDS best practices (§8).
+
+## 9. Block Library
+
+A Document Authoring (DA) Block Library lets authors browse and insert this
+site's blocks from the Sidekick, so new pages reuse the migrated components
+rather than being built from scratch. It is wired entirely through DA content
+(a DA project has no `tools/sidekick/library.json`):
+
+- **Block demo documents** — one published document per author-insertable block
+  at `/blocks/<block>` (18 total). Each carries a `library-metadata` block (the
+  block's name + a plain-language description of how to author it) followed by a
+  real, working instance of the block. Dynamic blocks (`recent-articles`,
+  `recent-adventures`, `adventures-listing`, `magazine-listing`,
+  `related-articles`) are shown as an empty marker with a note that they populate
+  from the query index on publish.
+- **Library group sheet** — `/library/blocks.json` (`name` → demo-doc `path`
+  rows) lists the blocks shown in the Library.
+- **DA config** — `/.da/config.json` maps `library-blocks` → the group sheet,
+  activating the Blocks group in the DA Sidekick Library.
+- **`library-metadata` block** (code) — a no-op that removes the metadata table
+  on the rendered demo page (it is Library-only), keeping `/blocks/*` clean.
+
+Excluded from the Library: `header`, `footer`, `fragment` (global/auto-loaded,
+not author-insertable). To add a block later: publish a `/blocks/<block>` demo
+doc and add a row to `/library/blocks.json`. The demo docs + sheets live in DA
+(deployed via the DA source API + publish), not in the git repo.
