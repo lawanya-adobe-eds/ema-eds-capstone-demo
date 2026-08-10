@@ -1,0 +1,6 @@
+/* library-metadata — hidden by default. It is metadata for the block-library
+   demo pages, never shown on the rendered site. The block JS removes it, but
+   this guards against a flash before decoration. */
+.library-metadata {
+  display: none;
+}
