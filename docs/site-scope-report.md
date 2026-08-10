@@ -301,16 +301,18 @@ shrinking inline emphasis in body copy site-wide).
 
 **Design deviations (intentional, documented):**
 - **Header / search / carousel / footer refinements to match the source.** The
-  desktop header height was raised to the source's 194px (nav vertical padding
-  62px; the `--nav-height` CLS reservation updated to 194px desktop, mobile
-  unchanged at 77px). The header search magnifier is a 20px masked-SVG icon
-  (matching the source glyph size). The carousel prev/next and footer social
-  marks use CSS/inline-SVG in place of the source's proprietary `wknd-icon-font`
-  (which we don't embed) — the carousel arrows are a CSS chevron tuned to the
-  source's thin arrows; the footer social icons are 48×48 light-grey squares
-  with dark inline-SVG glyphs, and "Follow Us" sits inline to the left of the
-  icon row (matching the source), replacing the earlier stacked layout. Verified
-  live desktop/mobile; CLS ~0.007 (no shift added).
+  header height matches the source per breakpoint — 194px desktop (nav vertical
+  padding 62px) and 117px mobile/tablet (25px dark bar + 92px white bar, nav
+  padding 25px); the `--nav-height` CLS reservation is set to those same values.
+  The header search magnifier is a 20px masked-SVG icon (matching the source
+  glyph size). The carousel prev/next and footer social marks use CSS/inline-SVG
+  in place of the source's proprietary `wknd-icon-font` (which we don't embed) —
+  the carousel arrows are a CSS chevron tuned to the source's thin arrows; the
+  footer social icons are 48×48 light-grey squares with dark inline-SVG glyphs.
+  The footer "Follow Us" layout mirrors the source responsively: inline to the
+  left of the icon row on desktop, stacked above the icons on mobile/tablet.
+  Verified live at desktop (1440), tablet (768), and mobile (375); CLS ~0.007
+  (no shift added).
 - **About Us contributors kept authored, not query-indexed** — the contributor
   grids are inline page content rather than separate pages, so a query index has
   nothing to aggregate (it indexes pages, not intra-page rows). Making them
@@ -345,8 +347,8 @@ tablet, and mobile:
 - **CLS** — driven to ~0: every image carries explicit `width`/`height` (block
   images set them to the CSS aspect ratio; a `reserveImageSpace()` pass in
   `decorateMain` sets intrinsic dimensions on free-flowing content images), and
-  the header reserves its true height per breakpoint (`--nav-height` 77px
-  mobile/tablet, 121px desktop; `min-height` on the header) so content no longer
+  the header reserves its true height per breakpoint (`--nav-height` 117px
+  mobile/tablet, 194px desktop; `min-height` on the header) so content no longer
   shifts as the header decorates.
 - **Constraints honored** — `scripts/aem.js` is never modified; all changes are
   in block CSS/JS, `styles/`, and `head.html`.
