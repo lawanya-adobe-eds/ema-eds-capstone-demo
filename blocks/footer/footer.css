@@ -80,19 +80,27 @@ footer .footer-nav a {
   text-transform: uppercase;
 }
 
-/* Follow Us + social icons */
+/* Follow Us + social icons — the source lays the "Follow Us" heading and the
+   icon row side by side (heading left, icons right), vertically centred. */
+footer .footer-social {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 footer .footer-social h4 {
-  margin: 0 0 12px;
+  margin: 0;
   color: rgb(235 235 235);
   font-size: 16px;
   font-weight: 400;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 footer .footer-social ul {
   display: flex;
   gap: 0;
-  margin: 0 0 24px;
+  margin: 0;
   padding: 0;
   list-style: none;
 }

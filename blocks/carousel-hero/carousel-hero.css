@@ -188,14 +188,17 @@ main .carousel-hero .carousel-hero-slide-content p > a:any-link:focus-visible {
   cursor: pointer;
 }
 
+/* Thin left/right chevrons matching the source's wknd-icon-font arrow glyphs
+   (‹ ›). A centered square with two borders forms the chevron; the wrapper
+   offsets keep the visual centre of the diagonal on the button centre. */
 .carousel-hero .carousel-hero-navigation-buttons button::after {
   content: '';
   display: block;
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border: 2px solid currentcolor;
   border-bottom: 0;
   border-right: 0;

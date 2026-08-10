@@ -48,7 +48,8 @@
      Matches WKND's actual rendered header height (dark utility bar + white main
      bar) so the header does not grow and push content down once decorated,
      avoiding layout shift (CLS). Mobile/tablet render one wrapped row (~77px);
-     desktop renders the two-row header (~121px, set in the >=900px block). */
+     desktop renders the taller two-row header (~194px, set in the >=900px block,
+     matching wknd.site's 194px header). */
   --nav-height: 77px;
 }
 
@@ -67,8 +68,9 @@
     --heading-font-size-s: 18px;
     --heading-font-size-xs: 16px;
 
-    /* desktop two-row header height (see --nav-height above) */
-    --nav-height: 121px;
+    /* desktop two-row header height (see --nav-height above) — matches
+       wknd.site's rendered 194px header (dark bar + tall white bar). */
+    --nav-height: 194px;
   }
 }
 

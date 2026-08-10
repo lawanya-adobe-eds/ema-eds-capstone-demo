@@ -135,7 +135,10 @@ header nav {
   gap: 32px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+
+  /* Source white bar is ~173px tall (48px logo + generous vertical padding);
+     62px top/bottom matches the source header's overall 194px height. */
+  padding: 62px 24px;
 }
 
 header nav p {
@@ -261,8 +264,10 @@ header .nav-search form {
 
 header .nav-search-icon {
   flex: 0 0 auto;
-  width: 16px;
-  height: 16px;
+
+  /* 20px magnifier to match the source's wknd-icon-font search glyph size. */
+  width: 20px;
+  height: 20px;
   background-color: rgb(32 32 32);
   mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>') no-repeat center / contain;
 }
