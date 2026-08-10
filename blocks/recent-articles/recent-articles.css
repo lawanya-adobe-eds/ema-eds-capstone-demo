@@ -55,19 +55,21 @@
   padding: 0;
 }
 
-/* Title: blue sentence-case link, body font, regular weight (matches source;
-   overrides the global serif h3). */
+/* Title: uppercase dark semi-bold label (matches the site's other card grids —
+   Adventures/Magazine listings — and the reference render: no blue link colour,
+   no underline). Overrides the global serif h3. */
 .recent-articles .recent-articles-card-body h3 {
   margin: 0;
   font-family: var(--body-font-family);
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 27px;
-  text-transform: none;
+  text-transform: uppercase;
+  color: var(--text-color);
 }
 
 .recent-articles .recent-articles-card-body h3 a:any-link {
-  color: var(--link-color);
+  color: var(--text-color);
   font: inherit;
   text-decoration: none;
 }
