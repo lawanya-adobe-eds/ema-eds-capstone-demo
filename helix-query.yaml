@@ -40,3 +40,29 @@ indices:
         select: none
         value: |
           parseTimestamp(headers('last-modified'), 'ddd, DD MMM YYYY hh:mm:ss GMT')
+
+  # Dedicated full-text index for the header search. The source (wknd.site)
+  # searches the whole page body, so matching only title/description missed
+  # in-body hits (e.g. "share" appears in each article's "Share this Story"
+  # section). This index adds a `content` field (the main body text) so the
+  # header live-suggest matches full text like the source. It is a SEPARATE
+  # target so the default index the homepage/listing blocks fetch stays lean —
+  # the body text only ships in this file, which the header fetches on demand
+  # (first keystroke), never blocking render (protects Core Web Vitals).
+  search:
+    include:
+      - '/us/en/**'
+    target: /us/en/search-index.json
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: |
+          attribute(el, 'content')
+      description:
+        select: head > meta[name="description"]
+        value: |
+          attribute(el, 'content')
+      content:
+        select: main
+        value: |
+          words(textContent(el), 0, 700)

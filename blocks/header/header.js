@@ -32,11 +32,15 @@ function toggleMenu(nav, forceExpanded = null) {
 }
 
 /**
- * Resolve the query-index path for both local dev (/content) and production.
+ * Resolve the full-text search-index path for both local dev (/content) and
+ * production. This is a dedicated index that includes each page's body text
+ * (a `content` field), so the header search matches full page content like the
+ * source — not just title/description. It is fetched only on the first keystroke
+ * (never during page load), so the heavier body text never affects render.
  */
 function getIndexPath() {
   const base = window.location.pathname.startsWith('/content/') ? '/content/us/en' : '/us/en';
-  return `${base}/query-index.json`;
+  return `${base}/search-index.json`;
 }
 
 // Cache the fetched index across keystrokes so we only load it once.
@@ -88,7 +92,9 @@ function setupSearch(input, results, form) {
     }
     loadIndex().then((data) => {
       const matches = data.filter((item) => {
-        const hay = `${item.title || ''} ${item.description || ''}`.toLowerCase();
+        // Match against title, description AND body content, so in-body hits
+        // surface like the source (e.g. "share" appears in each article body).
+        const hay = `${item.title || ''} ${item.description || ''} ${item.content || ''}`.toLowerCase();
         return hay.includes(q);
       });
       renderResults(matches, results);
