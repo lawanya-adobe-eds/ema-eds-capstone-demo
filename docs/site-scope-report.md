@@ -269,8 +269,12 @@ source's Source Sans Pro 16px/600 (scoped via `main h1 + h4`); and line-heights
 were aligned to the source's exact values — body/default text 1.5 (27px), nav
 1.5 (21px), footer legal 1.25 (15px), the "Featured Article" pretitle 2.5
 (45px), magazine article body paragraphs 2.5 (45px), related-link titles 1.5,
-with headings/blockquote/featured-description already matching. Verified live at
-desktop/tablet/mobile; CLS remained ~0.007 (line-height edits added no shift).
+with headings/blockquote/featured-description already matching. A responsive
+size gap was also closed: the source keeps h2 at 36px at every breakpoint, but
+the mobile-first `--heading-font-size-xl` token was 28px, shrinking generic h2s
+(e.g. article section headings) below 900px — set to 36px so h2 matches at all
+widths. Verified live at desktop (1440), tablet (768) and mobile (375) on both
+homepage and article templates; CLS remained ~0.007 (edits added no shift).
 
 **Out of scope / not migrated:**
 - **Other locales** — WKND publishes additional locale trees (e.g. `ca/en`,
