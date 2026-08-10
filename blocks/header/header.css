@@ -253,23 +253,26 @@ header nav .nav-sections a {
   }
 }
 
-/* Search */
+/* Search — the source field is 42px tall (padding 1px 32px around a 12px
+   input). Match that height with 11px vertical padding around the ~20px input. */
 header .nav-search form {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 11px 12px;
   background-color: rgb(235 235 235 / 54%);
 }
 
 header .nav-search-icon {
   flex: 0 0 auto;
 
-  /* 20px magnifier to match the source's wknd-icon-font search glyph size. */
-  width: 20px;
-  height: 20px;
+  /* Thin outline magnifier matching the source's wknd-icon-font search glyph
+     (a light-weight ring + handle, not a filled shape). Built from a stroked
+     SVG used as a mask so it inherits the dark icon color. ~18px to match. */
+  width: 18px;
+  height: 18px;
   background-color: rgb(32 32 32);
-  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>') no-repeat center / contain;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="7"/><line x1="21" y1="21" x2="15.8" y2="15.8"/></svg>') no-repeat center / contain;
 }
 
 header .nav-search input {

@@ -100,8 +100,12 @@ footer .footer-nav a {
 footer .footer-social h4 {
   margin: 21px 0;
   color: rgb(235 235 235);
+
+  /* Source renders "Follow Us" in the body face (Source Sans Pro) at 600,
+     not the Asar heading serif the h4 would otherwise inherit. */
+  font-family: var(--body-font-family);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.5;
   text-transform: uppercase;
   white-space: nowrap;
