@@ -34,6 +34,18 @@ footer .footer {
 
   footer .footer-social { grid-area: social; }
   footer .footer-legal { grid-area: legal; }
+
+  /* Desktop only: heading and icon row sit side by side, vertically centred
+     (the source's small-screen layout stacks them — see the default rules). */
+  footer .footer-social .default-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  footer .footer-social h4 {
+    margin: 0;
+  }
 }
 
 footer .footer a {
@@ -80,21 +92,17 @@ footer .footer-nav a {
   text-transform: uppercase;
 }
 
-/* Follow Us + social icons — the source lays the "Follow Us" heading and the
-   icon row side by side (heading left, icons right), vertically centred. The
-   heading + icon list sit inside the section's default-content-wrapper, so the
-   flex row is applied there. */
-footer .footer-social .default-content-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
+/* Follow Us + social icons — on desktop the source lays the "Follow Us" heading
+   and the icon row side by side (heading left, icons right), vertically centred.
+   On mobile/tablet the source STACKS the heading above the icons. The inline
+   (flex) layout is therefore scoped to >=900px (see the desktop block below);
+   the default here is the stacked/block layout the source uses on small screens. */
 footer .footer-social h4 {
-  margin: 0;
+  margin: 21px 0;
   color: rgb(235 235 235);
   font-size: 16px;
   font-weight: 400;
+  line-height: 1.5;
   text-transform: uppercase;
   white-space: nowrap;
 }

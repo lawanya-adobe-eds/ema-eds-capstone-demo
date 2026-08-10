@@ -47,10 +47,10 @@
   /* nav height — reserved space for the header before its block CSS loads.
      Matches WKND's actual rendered header height (dark utility bar + white main
      bar) so the header does not grow and push content down once decorated,
-     avoiding layout shift (CLS). Mobile/tablet render one wrapped row (~77px);
-     desktop renders the taller two-row header (~194px, set in the >=900px block,
-     matching wknd.site's 194px header). */
-  --nav-height: 77px;
+     avoiding layout shift (CLS). Mobile/tablet render one wrapped row (~117px:
+     25px dark bar + 92px white bar, matching wknd.site); desktop renders the
+     taller two-row header (~194px, set in the >=900px block). */
+  --nav-height: 117px;
 }
 
 @media (width >= 900px) {

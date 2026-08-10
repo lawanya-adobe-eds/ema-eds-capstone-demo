@@ -342,10 +342,13 @@ header .nav-hamburger {
     transform: rotate(-45deg);
   }
 
+  /* Match source's mobile white bar (~92px): the tallest element in the row is
+     the 42px search field, so 25px top/bottom padding brings the bar to ~92px
+     and the whole header to ~117px (25px dark bar + 92px), matching wknd.site. */
   header nav {
     flex-wrap: wrap;
     gap: 12px;
-    padding: 12px 16px 0;
+    padding: 25px 16px;
   }
 
   /* Top row of the main bar: hamburger + logo + search, all inline */
