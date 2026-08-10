@@ -329,14 +329,22 @@ rather than being built from scratch. It is wired entirely through DA content
   `recent-adventures`, `adventures-listing`, `magazine-listing`,
   `related-articles`) are shown as an empty marker with a note that they populate
   from the query index on publish.
-- **Library group sheet** — `/library/blocks.json` (`name` → demo-doc `path`
-  rows) lists the blocks shown in the Library.
-- **DA config** — `/.da/config.json` maps `library-blocks` → the group sheet,
-  activating the Blocks group in the DA Sidekick Library.
+- **Library group sheet** — `/library/blocks.json` (a `name`/`path` sheet, one
+  row per block) lists the blocks shown in the Library, each `path` a full
+  `content.da.live/.../blocks/<block>` URL.
+- **DA config** — a multi-sheet workbook with a `library` sheet whose one row
+  (`title: Blocks`, `path`: the full `content.da.live` URL of the blocks sheet,
+  `format` empty) registers the Blocks group. **This must be written to DA's
+  config *service*, not just uploaded as a source file**: the Sidekick Library
+  reads `admin.da.live/config/{org}/{repo}/`, which is populated by POSTing the
+  config as a multipart form-string field named `config` (a source-file upload
+  alone leaves the service returning 404 and the Library empty).
 - **`library-metadata` block** (code) — a no-op that removes the metadata table
   on the rendered demo page (it is Library-only), keeping `/blocks/*` clean.
 
 Excluded from the Library: `header`, `footer`, `fragment` (global/auto-loaded,
 not author-insertable). To add a block later: publish a `/blocks/<block>` demo
-doc and add a row to `/library/blocks.json`. The demo docs + sheets live in DA
-(deployed via the DA source API + publish), not in the git repo.
+doc, add a row to `/library/blocks.json`, and re-publish that sheet. The demo
+docs + sheets live in DA (deployed via the DA source API + publish) and the
+`library` config in the DA config service — none of it in the git repo.
+Verified live: the Blocks group and all 18 blocks appear in the DA Sidekick.
