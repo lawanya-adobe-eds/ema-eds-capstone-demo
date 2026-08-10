@@ -81,8 +81,10 @@ footer .footer-nav a {
 }
 
 /* Follow Us + social icons — the source lays the "Follow Us" heading and the
-   icon row side by side (heading left, icons right), vertically centred. */
-footer .footer-social {
+   icon row side by side (heading left, icons right), vertically centred. The
+   heading + icon list sit inside the section's default-content-wrapper, so the
+   flex row is applied there. */
+footer .footer-social .default-content-wrapper {
   display: flex;
   align-items: center;
   gap: 16px;
