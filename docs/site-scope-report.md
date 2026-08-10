@@ -221,8 +221,16 @@ published index (`/us/en/query-index.json`, config in `helix-query.yaml`):
    metadata row the magazine-article import injects). Verified end-to-end,
    including the Download-PDF article where a block sits between the heading and
    the list.
-5. **On-demand header search** — The global header's live-suggest search reads
-   the same query-index to surface matching pages as the user types.
+5. **On-demand full-text header search** — The global header's live-suggest
+   search matches the user's term against each page's title, description AND body
+   text, mirroring the source (which searches page content, not just metadata).
+   It reads a dedicated `/us/en/search-index.json` (a second `helix-query.yaml`
+   index carrying a `content` body-text field), fetched only on the first
+   keystroke — never during page load — so the heavier body text does not affect
+   Core Web Vitals. The lean default `query-index.json` (no body text) remains
+   what the homepage/listing blocks fetch. Previously the header matched only
+   title/description, so keyword searches diverged from the source (e.g. "share",
+   which appears in article bodies, returned unrelated pages).
 
 All of these blocks contain **zero hardcoded content** — they fetch, filter, and
 render from the index, so authoring is entirely a content-side activity.
