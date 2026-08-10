@@ -182,18 +182,27 @@ function buildMagazineArticle(main) {
   const aside = document.createElement('aside');
   aside.className = 'magazine-article-share';
 
-  // The "Share this story" heading and everything after it (within its wrapper)
-  // form the sidebar: the heading, an optional "Download PDF" block, and the
-  // related-story list. Some articles (e.g. the LA skateparks guide) insert a
-  // Download PDF block between the heading and the list, so we can't assume the
-  // list is the heading's immediate sibling — move the whole tail, in order.
-  const shareNodes = [];
-  let shareNode = shareHeading;
-  while (shareNode) {
-    shareNodes.push(shareNode);
-    shareNode = shareNode.nextElementSibling;
+  // Build the sidebar: the "Share this story" heading, an optional "Download
+  // PDF" block, and the related-story list (now a `related-articles` block).
+  // The heading is the LAST default-content node in a wrapper it shares with the
+  // article body/author, while the related-articles block sits in its OWN
+  // following wrapper (decorateSections wraps each block/default run separately).
+  // So: (1) move the heading and any following siblings WITHIN its wrapper to
+  // the aside, then (2) move that wrapper's following sibling wrappers (the
+  // Download PDF block, the related-articles block) to the aside too.
+  const shareWrapper = shareHeading.closest('.section > div');
+  let inlineTail = shareHeading;
+  while (inlineTail) {
+    const next = inlineTail.nextElementSibling;
+    aside.append(inlineTail);
+    inlineTail = next;
   }
-  shareNodes.forEach((node) => aside.append(node));
+  let wrapperTail = shareWrapper ? shareWrapper.nextElementSibling : null;
+  while (wrapperTail) {
+    const next = wrapperTail.nextElementSibling;
+    aside.append(wrapperTail);
+    wrapperTail = next;
+  }
 
   // Split each related-story link ("<Title> <Weekday, DD Mon YYYY>") into a
   // title line over a small grey date line, matching the source. The related
