@@ -1,11 +1,13 @@
 /* recent-articles — dynamic homepage "Recent Articles" grid built from the
-   query index. Visual design matches the cards-teaser block it replaces
-   (source WKND image-list): flat cards, 13:10 image tiles, uppercase title,
-   single-line grey uppercase description, mobile-first widening to 4-up. */
+   query index. Visual design matches the wknd.site source card grid: fixed
+   260x200 image tiles, a blue sentence-case title link, and a single grey
+   uppercase description line. Mobile shows one 260px card centered with side
+   gutters (like the source), widening to 2-up at 600px and 4-up at 900px. */
 
 .recent-articles > ul {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: 260px;
+  justify-content: center;
   gap: 32px 14px;
   margin: 0;
   padding: 0;
@@ -15,6 +17,7 @@
 @media (width >= 600px) {
   .recent-articles > ul {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: normal;
   }
 }
 
@@ -34,7 +37,7 @@
   background: none;
 }
 
-/* Image on top, cropped to the source's ~260x200 (13:10) ratio. */
+/* Image on top, cropped to the source's fixed 260x200 tile. */
 .recent-articles .recent-articles-card-image {
   display: block;
   line-height: 0;
@@ -43,7 +46,7 @@
 .recent-articles .recent-articles-card-image img {
   display: block;
   width: 100%;
-  aspect-ratio: 13 / 10;
+  height: 200px;
   object-fit: cover;
 }
 
@@ -52,19 +55,19 @@
   padding: 0;
 }
 
-/* Title: body font, uppercase, semi-bold, dark text (overrides global h3). */
+/* Title: blue sentence-case link, body font, regular weight (matches source;
+   overrides the global serif h3). */
 .recent-articles .recent-articles-card-body h3 {
-  margin: 10px 0 0;
+  margin: 0;
   font-family: var(--body-font-family);
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 27px;
-  text-transform: uppercase;
-  color: var(--text-color);
+  text-transform: none;
 }
 
 .recent-articles .recent-articles-card-body h3 a:any-link {
-  color: var(--text-color);
+  color: var(--link-color);
   font: inherit;
   text-decoration: none;
 }
