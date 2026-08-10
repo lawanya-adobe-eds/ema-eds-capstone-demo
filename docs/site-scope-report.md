@@ -230,7 +230,11 @@ published index (`/us/en/query-index.json`, config in `helix-query.yaml`):
    Core Web Vitals. The lean default `query-index.json` (no body text) remains
    what the homepage/listing blocks fetch. Previously the header matched only
    title/description, so keyword searches diverged from the source (e.g. "share",
-   which appears in article bodies, returned unrelated pages).
+   which appears in article bodies, returned unrelated pages). Verified against
+   the source across desktop, tablet, and mobile: the migrated results are a
+   superset of the source's (all its matches plus any other page that genuinely
+   contains the term), with the search box and dropdown intact and no horizontal
+   overflow at any breakpoint.
 
 All of these blocks contain **zero hardcoded content** — they fetch, filter, and
 render from the index, so authoring is entirely a content-side activity.
