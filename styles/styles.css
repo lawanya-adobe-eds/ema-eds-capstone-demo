@@ -122,6 +122,16 @@ h4 { font-size: var(--heading-font-size-m); }
 h5 { font-size: var(--heading-font-size-s); }
 h6 { font-size: var(--heading-font-size-xs); }
 
+/* Magazine-article byline: the <h4> immediately after the article <h1> (e.g.
+   "By Jacob Wester"). The source renders this as a small Source Sans Pro label
+   (16px / 600), NOT the Asar 20px heading the global h4 rule applies. Scoped by
+   adjacency so other h4s (footer "Follow Us", author card) are unaffected. */
+main h1 + h4 {
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-s); /* 16px */
+  font-weight: 600;
+}
+
 /* Standalone section-title headings (authored as default content, e.g.
    "Recent Articles", "Next Adventures", "All Articles", "Members Only") carry
    a short yellow underline in the source (an 84px, 2px rgb(255 234 0) bar
