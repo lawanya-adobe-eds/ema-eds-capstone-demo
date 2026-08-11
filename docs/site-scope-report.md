@@ -192,10 +192,10 @@ site-level transformers (no hand-authored HTML in `content/`).
 
 ## 6. Dynamic Behaviors
 
-Six behaviors are data-driven rather than static content, reading published
+Seven behaviors are data-driven rather than static content, reading published
 indices generated from `helix-query.yaml` (the default `/us/en/query-index.json`
-plus two purpose-built indices — the header's `search-index.json` and the FAQ
-page's `faqs/faq-index.json`):
+plus three purpose-built indices — the header's `search-index.json`, the FAQ
+page's `faqs/faq-index.json`, and the About Us `about-us/people-index.json`):
 
 1. **Query-index-driven listings** — The Adventures and Magazine listing pages
    render their card grids from the index. Adventure category (Activity spec) is
@@ -261,6 +261,23 @@ page's `faqs/faq-index.json`):
    index. Minor deviation: the answer text is indexed via `textContent`, so the
    bold on two proper names in one answer ("Is WKND a real company?") renders as
    plain text — a negligible cosmetic loss versus the authored inline version.
+7. **Query-index-driven About Us people grids** — the two `cards-people` grids
+   ("Our Contributors", "WKND Guides") are rendered by the `cards-people` block
+   in dynamic mode: the page holds two markers (`dynamic contributors` /
+   `dynamic guides`) and the block fetches `/us/en/about-us/people-index.json`,
+   filters by `group`, sorts by `order`, and builds the cards (optimized portrait,
+   name, role, inline-SVG social icons). Each person is a published page under
+   `/us/en/about-us/<slug>` (name as `og:title`, role/group/order and the three
+   social links as meta, portrait auto-imported to `og:image`). Adding a person
+   page updates the right grid on publish. Bios/images stay in each sub-page's
+   HTML, so they remain searchable/crawlable (verified: all 7 person pages in
+   `search-index.json`). In dynamic mode the block emits one grid per group (a
+   multi-item `<ul>` with 1/2/4-up columns) rather than the authored
+   one-card-per-block layout; the landing page is filtered out (requires
+   `group` + `order`). Verified live at desktop (4-up/3-up), tablet (2-up), and
+   mobile (1-up): correct people in order, images + social icons intact, CLS
+   ~0.008, no horizontal overflow, and the listing grids unaffected (no
+   `/about-us/*` leakage).
 
 All of these blocks contain **zero hardcoded content** — they fetch, filter, and
 render from an index, so authoring is entirely a content-side activity.
@@ -345,13 +362,15 @@ shrinking inline emphasis in body copy site-wide).
   data-driven while keeping the answer text in crawlable/searchable HTML. The
   rendered accordion is visually identical to the source; the extra URLs are the
   only outward difference.
-- **About Us contributors kept authored, not query-indexed** — unlike the FAQ
-  page above, the contributor grids were left inline. A query index aggregates
-  pages, not intra-page rows, so making them dynamic would mean promoting each of
-  the 7 people to a standalone public page. For contributors that IA change adds
-  no authoring benefit (they're a static bio grid, not a growing list), so they
-  stay authored `cards-people` content — already fully author-editable in the doc
-  (see §6). No visual/behavioral difference from the source.
+- **About Us people grids made query-index-driven (IA change, intentional)** —
+  the two `cards-people` grids ("Our Contributors" and "WKND Guides") now source
+  from 7 per-person pages under `/us/en/about-us/` via a `people` query index,
+  filtered by `group` (see §6). Same trade-off as the FAQ page: 7 public URLs not
+  present on wknd.site, in exchange for a data-driven, single-page-per-person
+  model whose bios/images stay in crawlable/searchable HTML. Portraits are
+  auto-imported and optimized onto our domain (a bonus over a client feed, which
+  would hotlink them). The rendered grids are visually identical to the source
+  (4-up contributors, 3-up guides; 1/2/4-up responsive).
 - Social marks use portable inline SVG icons in place of the source's
   proprietary `wknd-icon-font`, styled to match the source's exact size/colors.
 - Some source layouts built on AEM's 12-column grid are reproduced with CSS
