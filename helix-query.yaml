@@ -66,3 +66,28 @@ indices:
         select: main
         value: |
           words(textContent(el), 0, 700)
+
+  # FAQ index — one row per FAQ sub-page under /us/en/faqs/. The dynamic
+  # accordion-faq block fetches this to build the FAQ list at runtime, so new
+  # FAQ pages appear automatically without re-authoring the FAQs page. Each FAQ
+  # sub-page renders the question as og:title and the full answer as its body
+  # paragraph (so the answer text stays in the page HTML — searchable and
+  # crawlable — unlike a client-only feed). `order` sequences the accordion.
+  faq:
+    include:
+      - '/us/en/faqs/**'
+    target: /us/en/faqs/faq-index.json
+    properties:
+      question:
+        select: head > meta[property="og:title"]
+        value: |
+          attribute(el, 'content')
+      answer:
+        # Full answer text is the first body paragraph of the FAQ sub-page.
+        select: main > div > p
+        value: |
+          textContent(el)
+      order:
+        select: head > meta[name="order"]
+        value: |
+          attribute(el, 'content')
