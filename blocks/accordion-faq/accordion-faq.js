@@ -91,9 +91,13 @@ function getDynamicSource(block) {
  * plain text from the index (first-party trusted content); assigned as text.
  */
 function renderFromIndex(block, rows) {
+  // Require a question, a non-empty answer, AND a numeric order. The `faq`
+  // index glob (/us/en/faqs/**) also matches the FAQs landing page itself,
+  // which has a title but no answer paragraph and no order — this filter drops
+  // that row (and any other non-FAQ page) so only real FAQ entries render.
   const items = rows
-    .filter((r) => r.question)
-    .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+    .filter((r) => r.question && (r.answer || '').trim() && Number.isFinite(Number(r.order)) && String(r.order).trim() !== '')
+    .sort((a, b) => Number(a.order) - Number(b.order));
 
   block.textContent = '';
   items.forEach((item) => {
