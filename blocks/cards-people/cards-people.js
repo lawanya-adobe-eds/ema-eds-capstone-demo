@@ -18,11 +18,35 @@ function socialKeyFromLink(link) {
   return null;
 }
 
+/** Turn a card body's text social links into labelled inline-SVG icon links. */
+function iconizeSocialLinks(scope) {
+  scope.querySelectorAll('.cards-people-card-body a').forEach((link) => {
+    const key = socialKeyFromLink(link);
+    if (key && SOCIAL_ICONS[key]) {
+      link.setAttribute('aria-label', link.getAttribute('aria-label') || link.textContent.trim() || key);
+      link.classList.add('cards-people-social-icon');
+      link.innerHTML = SOCIAL_ICONS[key];
+    }
+  });
+}
+
+/** Optimize a card image and give it explicit dimensions to prevent CLS. */
+function optimizePicture(pic) {
+  const img = pic.querySelector('img');
+  if (!img) return;
+  const optimized = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
+  // Square (1:1) sizing hint matches the CSS (aspect-ratio:1/1; object-fit:cover).
+  const newImg = optimized.querySelector('img');
+  newImg.setAttribute('width', '164');
+  newImg.setAttribute('height', '164');
+  pic.replaceWith(optimized);
+}
+
 /**
- * cards-people — contributor/people card grid.
- * Each block row is one person: [image, body(name + role + social links)].
+ * Decorate authored rows in place (default mode). Each block is one person:
+ * [image, body(name + role + social links)].
  */
-export default function decorate(block) {
+function decorateAuthored(block) {
   const ul = document.createElement('ul');
   [...block.children].forEach((row) => {
     const li = document.createElement('li');
@@ -36,27 +60,113 @@ export default function decorate(block) {
     });
     ul.append(li);
   });
-  ul.querySelectorAll('picture > img').forEach((img) => {
-    const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
-    // Reserve layout space to prevent CLS. Square (1:1) to match the CSS
-    // (aspect-ratio:1/1; object-fit:cover) — sizing hint only, no visual change.
-    const newImg = optimizedPic.querySelector('img');
-    newImg.setAttribute('width', '164');
-    newImg.setAttribute('height', '164');
-    img.closest('picture').replaceWith(optimizedPic);
-  });
-
-  // Replace social link text with inline SVG icons (source shows icons, not
-  // text). The visible label becomes an accessible aria-label on the link.
-  ul.querySelectorAll('.cards-people-card-body a').forEach((link) => {
-    const key = socialKeyFromLink(link);
-    if (key && SOCIAL_ICONS[key]) {
-      link.setAttribute('aria-label', link.getAttribute('aria-label') || link.textContent.trim() || key);
-      link.classList.add('cards-people-social-icon');
-      link.innerHTML = SOCIAL_ICONS[key];
-    }
-  });
-
+  ul.querySelectorAll('picture').forEach(optimizePicture);
+  iconizeSocialLinks(ul);
   block.textContent = '';
   block.append(ul);
+}
+
+/** Resolve the people index path for both local dev (/content) and production. */
+function getIndexPath() {
+  const base = window.location.pathname.startsWith('/content/') ? '/content/us/en' : '/us/en';
+  return `${base}/about-us/people-index.json`;
+}
+
+/**
+ * Detect dynamic mode: a single cell reading "dynamic <group>" (e.g.
+ * "dynamic contributors"). Returns the group name, or null for authored mode.
+ */
+function getDynamicGroup(block) {
+  if (block.children.length !== 1) return null;
+  const cell = block.querySelector(':scope > div > div');
+  if (!cell) return null;
+  const text = cell.textContent.trim();
+  const m = /^dynamic\s+(\S+)/i.exec(text);
+  return m ? m[1].toLowerCase() : null;
+}
+
+/** Build one person card <li> from an index row. */
+function buildCard(item) {
+  const li = document.createElement('li');
+
+  const imageDiv = document.createElement('div');
+  imageDiv.className = 'cards-people-card-image';
+  if (item.image) {
+    const pic = createOptimizedPicture(item.image, item.name || '', false, [{ width: '750' }]);
+    const img = pic.querySelector('img');
+    img.setAttribute('width', '164');
+    img.setAttribute('height', '164');
+    imageDiv.append(pic);
+  }
+
+  const body = document.createElement('div');
+  body.className = 'cards-people-card-body';
+  const name = document.createElement('h3');
+  name.textContent = item.name || '';
+  const role = document.createElement('h5');
+  role.textContent = item.role || '';
+  body.append(name, role);
+
+  // Social links row — only render links that have a real href.
+  const socials = [['facebook', item.facebook], ['twitter', item.twitter], ['instagram', item.instagram]]
+    .filter(([, href]) => href);
+  if (socials.length) {
+    const p = document.createElement('p');
+    socials.forEach(([net, href]) => {
+      const a = document.createElement('a');
+      a.href = href;
+      a.textContent = net.charAt(0).toUpperCase() + net.slice(1);
+      p.append(a, document.createTextNode(' '));
+    });
+    body.append(p);
+  }
+
+  li.append(imageDiv, body);
+  return li;
+}
+
+/**
+ * Render a people grid from index rows for one group, ordered by `order`.
+ * Rows without a group or order are dropped (this filters out the About Us
+ * landing page, which the index glob /us/en/about-us/** also matches).
+ */
+function renderFromIndex(block, rows, group) {
+  const people = rows
+    .filter((r) => r.name && r.group === group && String(r.order || '').trim() !== '')
+    .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
+
+  const ul = document.createElement('ul');
+  people.forEach((item) => ul.append(buildCard(item)));
+  iconizeSocialLinks(ul);
+
+  block.textContent = '';
+  block.classList.add('cards-people-grid');
+  block.append(ul);
+}
+
+/**
+ * loads and decorates the cards-people block
+ * @param {Element} block The cards-people block element
+ */
+export default async function decorate(block) {
+  const group = getDynamicGroup(block);
+
+  if (!group) {
+    decorateAuthored(block);
+    return;
+  }
+
+  try {
+    const res = await fetch(getIndexPath());
+    const json = res.ok ? await res.json() : null;
+    const rows = json && Array.isArray(json.data) ? json.data : [];
+    if (rows.some((r) => r.group === group)) {
+      renderFromIndex(block, rows, group);
+      return;
+    }
+  } catch (e) {
+    // fall through to graceful cleanup below
+  }
+  // Index unavailable/empty for this group: clear the placeholder marker.
+  block.textContent = '';
 }

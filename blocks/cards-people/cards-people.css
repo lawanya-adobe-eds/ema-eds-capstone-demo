@@ -33,6 +33,33 @@
   list-style: none;
 }
 
+/* Dynamic mode: one block per group holds ALL its people in a single <ul>, so
+   the grid columns live on that <ul> (the authored mode instead relies on the
+   section wrapper flowing one-card blocks inline — see the wrapper rules above).
+   The wrapper for a dynamic block spans full width so this grid controls the
+   columns: 1-up mobile, 2-up tablet, 4-up desktop, matching the source. */
+.section .cards-people-wrapper:has(.cards-people-grid) {
+  display: block;
+  width: 100%;
+  margin-right: 0;
+}
+
+.cards-people-grid > ul {
+  grid-template-columns: 1fr;
+}
+
+@media (width >= 600px) {
+  .cards-people-grid > ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width >= 900px) {
+  .cards-people-grid > ul {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 .cards-people > ul > li {
   display: flex;
   flex-direction: column;
