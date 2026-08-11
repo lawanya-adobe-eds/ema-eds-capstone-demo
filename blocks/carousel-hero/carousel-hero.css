@@ -2,14 +2,18 @@
    Values extracted from computed styles of div.carousel.cmp-carousel--hero
    on https://wknd.site/us/en.html across mobile/tablet/desktop. */
 
-/* Full-bleed: break out of the 1200px section container. */
+/* Full-bleed: break out of the 1200px section container. The source caps its
+   whole content band (hero included) at 1680px on very large screens, so the
+   breakout is capped at min(100vw, 1680px) and centered: at <=1680px this is
+   100vw (true full-bleed, unchanged); beyond 1680px it holds 1680px centered
+   instead of stretching edge-to-edge. */
 .carousel-hero-wrapper {
   max-width: 100% !important;
 }
 
 .carousel-hero {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  width: min(100vw, 1680px);
+  margin-left: calc(50% - min(50vw, 840px));
 }
 
 .carousel-hero .carousel-hero-slides-container {

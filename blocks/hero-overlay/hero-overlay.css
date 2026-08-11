@@ -4,9 +4,13 @@
    source computed styles. */
 
 /* Break the block out of the section's centered/padded container so the
-   image can render full-bleed. */
+   image can render full-bleed. Capped at 1680px centered to match the source's
+   content-band cap on very large screens: at <=1680px this fills the viewport
+   (full-bleed, unchanged); beyond 1680px it holds 1680px centered rather than
+   stretching edge-to-edge. */
 .hero-overlay-container .hero-overlay-wrapper {
-  max-width: unset;
+  max-width: 1680px;
+  margin-inline: auto;
   padding: 0;
 }
 
