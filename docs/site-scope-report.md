@@ -304,15 +304,19 @@ shrinking inline emphasis in body copy site-wide).
   header height matches the source per breakpoint — 194px desktop (nav vertical
   padding 62px) and 117px mobile/tablet (25px dark bar + 92px white bar, nav
   padding 25px); the `--nav-height` CLS reservation is set to those same values.
-  The header search magnifier is a 20px masked-SVG icon (matching the source
-  glyph size). The carousel prev/next and footer social marks use CSS/inline-SVG
-  in place of the source's proprietary `wknd-icon-font` (which we don't embed) —
+  The header search field is a 42px-tall grey box with a 12px input, matching
+  the source; its magnifier is a thin outline (ring + handle) masked-SVG icon,
+  matching the source's light `wknd-icon-font` glyph rather than a heavy filled
+  shape. The carousel prev/next and footer social marks use CSS/inline-SVG in
+  place of the source's proprietary `wknd-icon-font` (which we don't embed) —
   the carousel arrows are a CSS chevron tuned to the source's thin arrows; the
-  footer social icons are 48×48 light-grey squares with dark inline-SVG glyphs.
-  The footer "Follow Us" layout mirrors the source responsively: inline to the
-  left of the icon row on desktop, stacked above the icons on mobile/tablet.
-  Verified live at desktop (1440), tablet (768), and mobile (375); CLS ~0.007
-  (no shift added).
+  footer social icons are 48×48 light-grey squares with dark inline-SVG glyphs
+  (Facebook a bare "f", Twitter bird, Instagram camera outline). The footer
+  "Follow Us" heading renders in the body face (Source Sans Pro) at weight 600
+  — matching the source — not the Asar heading serif; its layout mirrors the
+  source responsively: inline to the left of the icon row on desktop, stacked
+  above the icons on mobile/tablet. Verified live at desktop (1440), tablet
+  (768), and mobile (375); CLS 0 (no shift added).
 - **About Us contributors kept authored, not query-indexed** — the contributor
   grids are inline page content rather than separate pages, so a query index has
   nothing to aggregate (it indexes pages, not intra-page rows). Making them
