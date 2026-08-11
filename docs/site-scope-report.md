@@ -338,6 +338,15 @@ shrinking inline emphasis in body copy site-wide).
 - The mobile nav is a light, edge-to-edge dropdown rather than the source's dark
   off-canvas drawer; the WKND yellow hover/active treatment on nav links is
   scoped to the desktop bar (the source shows no yellow on mobile).
+- **Large-screen content cap (>1680px).** The source caps its entire content
+  band at 1680px centered on very wide screens (its `.root` container has
+  `max-width: 1680px`), so the full-bleed hero and the full-width "Climbing New
+  Zealand" overlay stop growing beyond 1680px and center with side margins.
+  Matched by capping those two full-bleed blocks at `min(100vw, 1680px)`
+  centered; at ≤1680px they remain true full-bleed (desktop/tablet/mobile
+  behavior unchanged). Text sections (1200px), header, and footer (1200px)
+  already centered. Verified live at 1920px and 2560px with no horizontal
+  overflow and the content band centered exactly as the source.
 
 ## 8. Performance & Core Web Vitals
 
@@ -357,9 +366,11 @@ tablet, and mobile:
 - **Constraints honored** — `scripts/aem.js` is never modified; all changes are
   in block CSS/JS, `styles/`, and `head.html`.
 
-**Quality bar:** each template was validated against the source at desktop
-(1440), tablet (768), and mobile (375) for visual fidelity, responsiveness, and
-zero horizontal overflow, and meets Core Web Vitals per EDS best practices (§8).
+**Quality bar:** each template was validated against the source at large-screen
+(2560/1920), desktop (1440), tablet (768), and mobile (375) for visual fidelity,
+responsiveness, and zero horizontal overflow, and meets Core Web Vitals per EDS
+best practices (§8). On large screens the content band centers at 1680px to
+match the source rather than stretching edge-to-edge.
 
 ## 9. Block Library
 
