@@ -192,8 +192,10 @@ site-level transformers (no hand-authored HTML in `content/`).
 
 ## 6. Dynamic Behaviors
 
-Five behaviors are data-driven rather than static content, all reading the same
-published index (`/us/en/query-index.json`, config in `helix-query.yaml`):
+Six behaviors are data-driven rather than static content, reading published
+indices generated from `helix-query.yaml` (the default `/us/en/query-index.json`
+plus two purpose-built indices — the header's `search-index.json` and the FAQ
+page's `faqs/faq-index.json`):
 
 1. **Query-index-driven listings** — The Adventures and Magazine listing pages
    render their card grids from the index. Adventure category (Activity spec) is
@@ -240,9 +242,28 @@ published index (`/us/en/query-index.json`, config in `helix-query.yaml`):
    superset of the source's (all its matches plus any other page that genuinely
    contains the term), with the search box and dropdown intact and no horizontal
    overflow at any breakpoint.
+6. **Query-index-driven FAQ accordion** — The FAQs page's accordion is rendered
+   by the `accordion-faq` block in dynamic mode: instead of authored
+   `[question | answer]` rows, the page holds a single `dynamic` marker and the
+   block fetches a dedicated `/us/en/faqs/faq-index.json`. Each FAQ is its own
+   published page under `/us/en/faqs/<slug>` (question as `og:title`, full answer
+   as the body paragraph, an `order` meta for sequence); the block sorts by
+   `order` and builds the `<details>` items. Adding/editing a FAQ page updates
+   the page automatically on publish — no re-authoring of the FAQs page.
+   Crucially, because each answer renders as body HTML on its sub-page, the
+   answer text stays in `search-index.json` and remains crawlable (no SEO/search
+   regression — the deciding reason this was done via the query index rather than
+   a client-only feed). The strict path-regex filters on the Magazine/Adventures
+   listing blocks (`/us/en/{magazine,adventures}/<slug>`) ignore the new
+   `/us/en/faqs/*` pages, so no grid picks them up. Verified live at desktop
+   (sidebar layout), tablet, and mobile (stacked): 7 items in order, CLS 0, no
+   horizontal overflow, and FAQ answer keywords confirmed present in the search
+   index. Minor deviation: the answer text is indexed via `textContent`, so the
+   bold on two proper names in one answer ("Is WKND a real company?") renders as
+   plain text — a negligible cosmetic loss versus the authored inline version.
 
 All of these blocks contain **zero hardcoded content** — they fetch, filter, and
-render from the index, so authoring is entirely a content-side activity.
+render from an index, so authoring is entirely a content-side activity.
 
 **Where a query-index approach does *not* apply — About Us contributors.** The
 query index has one row per *published page*; it aggregates pages, it cannot
@@ -317,13 +338,20 @@ shrinking inline emphasis in body copy site-wide).
   source responsively: inline to the left of the icon row on desktop, stacked
   above the icons on mobile/tablet. Verified live at desktop (1440), tablet
   (768), and mobile (375); CLS 0 (no shift added).
-- **About Us contributors kept authored, not query-indexed** — the contributor
-  grids are inline page content rather than separate pages, so a query index has
-  nothing to aggregate (it indexes pages, not intra-page rows). Making them
-  dynamic would mean promoting each of the 7 people to a standalone public page
-  and changing the site's information architecture. Left as authored
-  `cards-people` content, which is already fully author-editable in the doc (see
-  §6). No visual/behavioral difference from the source.
+- **FAQ accordion made query-index-driven (IA change, intentional)** — the FAQs
+  page now sources its accordion from 7 per-FAQ pages via a `faq` query index
+  (see §6). This adds 7 public URLs under `/us/en/faqs/` that don't exist on
+  wknd.site — a deliberate information-architecture change to make the FAQ list
+  data-driven while keeping the answer text in crawlable/searchable HTML. The
+  rendered accordion is visually identical to the source; the extra URLs are the
+  only outward difference.
+- **About Us contributors kept authored, not query-indexed** — unlike the FAQ
+  page above, the contributor grids were left inline. A query index aggregates
+  pages, not intra-page rows, so making them dynamic would mean promoting each of
+  the 7 people to a standalone public page. For contributors that IA change adds
+  no authoring benefit (they're a static bio grid, not a growing list), so they
+  stay authored `cards-people` content — already fully author-editable in the doc
+  (see §6). No visual/behavioral difference from the source.
 - Social marks use portable inline SVG icons in place of the source's
   proprietary `wknd-icon-font`, styled to match the source's exact size/colors.
 - Some source layouts built on AEM's 12-column grid are reproduced with CSS
