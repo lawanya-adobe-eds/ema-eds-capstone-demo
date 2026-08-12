@@ -193,9 +193,15 @@ site-level transformers (no hand-authored HTML in `content/`).
 ## 6. Dynamic Behaviors
 
 Seven behaviors are data-driven rather than static content, reading published
-indices generated from `helix-query.yaml` (the default `/us/en/query-index.json`
-plus three purpose-built indices — the header's `search-index.json`, the FAQ
-page's `faqs/faq-index.json`, and the About Us `about-us/people-index.json`):
+indices generated from `helix-query.yaml`. The single site-wide index was split
+into **per-section indices** so each block fetches only its own section (smaller,
+faster, and authorable): `adventures/query-index.json`, `magazine/query-index.json`,
+`faqs/faq-index.json`, `about-us/people-index.json`, the header's
+`search-index.json`, and a small top-level `pages-index.json`. Blocks use a
+per-path cache so a page loading two different indices (e.g. the homepage's
+article + adventure grids) never collide. The Adventures listing takes its index
+path from an authored config cell (`/us/en/adventures/query-index.json`), so the
+source is editable without code changes:
 
 1. **Query-index-driven listings** — The Adventures and Magazine listing pages
    render their card grids from the index. Adventure category (Activity spec) is
@@ -394,7 +400,17 @@ shrinking inline emphasis in body copy site-wide).
   behavior unchanged). Text sections (1200px), header, and footer (1200px)
   already centered. Verified live at 1920px and 2560px with no horizontal
   overflow and the content band centered exactly as the source.
-
+- **Per-section query indices + auto-generated sitemap.** The site-wide query
+  index was split into per-folder indices (see §6). A custom `helix-sitemap.yaml`
+  to rebuild `/sitemap.xml` from those scoped indices was attempted but reverted:
+  on this project (no custom production domain) a custom sitemap renders every
+  `<loc>` as `https://undefined/...` because the sitemap host comes from
+  `cdn.prod.host`, which the config service refuses to set to an `*.aem.live`
+  endpoint ("AEM endpoints not allowed"). The site therefore keeps the
+  auto-generated sitemap (which resolves the host from the request and lists all
+  published resources, including the `/blocks/*` demo pages, `/nav`, `/footer`).
+  A custom, content-only sitemap becomes possible once a real custom domain +
+  CDN are configured.
 ## 8. Performance & Core Web Vitals
 
 Optimized to EDS best practices and validated on the live site across desktop,
