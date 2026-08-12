@@ -20,17 +20,30 @@
  *                       <span class="...-date">Weekday, DD Mon YYYY</span></a></li>
  *   </ul>
  *
- * If the marker DOES carry cell text, that text is rendered as an <h5> heading
- * (self-contained fallback for use outside the magazine-article layout).
+ * If the marker carries cell text, it is interpreted as: an index path when it
+ * contains a ".json" path (authored the same way as the adventures-listing /
+ * magazine-listing config cell), otherwise an <h5> heading (self-contained
+ * fallback for use outside the magazine-article layout).
  */
 
 // How many related stories to show (matches the source's list length).
 const LIMIT = 4;
 
-/** Resolve the magazine section index path (dev-aware). */
-function getIndexPath() {
+/** Default magazine section index path (dev-aware), used when none is authored. */
+function defaultIndexPath() {
   const base = window.location.pathname.startsWith('/content/') ? '/content/us/en' : '/us/en';
   return `${base}/magazine/query-index.json`;
+}
+
+/**
+ * Resolve an authored index path (dev-aware): absolute URLs pass through;
+ * root-absolute paths get the /content prefix on local dev; empty → default.
+ */
+function resolveIndexPath(raw) {
+  if (!raw) return defaultIndexPath();
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const prefix = window.location.pathname.startsWith('/content/') && raw.startsWith('/') ? '/content' : '';
+  return `${prefix}${raw}`;
 }
 
 /** Prefix internal paths for local dev (content served under /content). */
@@ -40,8 +53,7 @@ function withPrefix(path) {
 }
 
 /** Fetch a published query index, cached per-path across blocks on the page. */
-async function loadIndex() {
-  const path = getIndexPath();
+async function loadIndex(path) {
   window.wkndIndexCache = window.wkndIndexCache || {};
   if (!window.wkndIndexCache[path]) {
     window.wkndIndexCache[path] = fetch(path)
@@ -96,15 +108,23 @@ function buildItem(item) {
  * @param {Element} block The block element
  */
 export default async function decorate(block) {
-  // Optional heading: only if the marker carries cell text (fallback use). In
-  // the magazine-article layout the authored <h5> sits before the block, so the
-  // marker is empty and no heading is rendered here.
-  const heading = block.textContent.trim();
+  // Interpret any authored cell text: a ".json" path selects the index source
+  // (config-cell pattern); other text is an optional heading. In the
+  // magazine-article layout the authored <h5> sits before the block, so the
+  // marker is typically empty (index defaults, no heading rendered here).
+  let heading = '';
+  let authoredPath = '';
+  [...block.children].forEach((row) => {
+    const text = (row.textContent || '').trim();
+    if (!text) return;
+    if (/\.json(\?|$)/i.test(text)) authoredPath = text;
+    else if (!heading) heading = text;
+  });
   block.textContent = '';
 
   const currentPath = window.location.pathname.replace(/^\/content/, '').replace(/\.html$/, '');
 
-  const data = await loadIndex();
+  const data = await loadIndex(resolveIndexPath(authoredPath));
   const articles = data
     .filter((it) => /\/us\/en\/magazine\/[^/]+$/.test(it.path))
     .filter((it) => it.path !== currentPath)
