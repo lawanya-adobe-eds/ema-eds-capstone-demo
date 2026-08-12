@@ -211,6 +211,10 @@ in the page without code changes:
 - `related-articles` (each magazine article's "Share this story" sidebar) — a
   cell with the `.json` path (`/us/en/magazine/query-index.json`); the preceding
   "Share this story" `<h5>` is unchanged. Applied to all 5 article pages.
+- `recent-articles` (homepage "Recent Articles") — cell:
+  `/us/en/magazine/query-index.json`
+- `recent-adventures` (homepage "Where do you want to go?") — cell:
+  `/us/en/adventures/query-index.json`
 
 Each block keeps a fallback (default section index / legacy `dynamic` keyword) so
 it degrades gracefully. `pages-index.json` (sitemap-only) and `search-index.json`
