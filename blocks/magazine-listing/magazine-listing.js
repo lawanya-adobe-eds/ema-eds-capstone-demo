@@ -1,12 +1,23 @@
 import { toClassName, createOptimizedPicture } from '../../scripts/aem.js';
 
 /**
- * Resolve the magazine section index path (dev-aware). The site-wide index was
- * split per section, so this reads the scoped magazine index.
+ * Default magazine section index path (dev-aware), used when no index path is
+ * authored in the block.
  */
-function getIndexPath() {
+function defaultIndexPath() {
   const base = window.location.pathname.startsWith('/content/') ? '/content/us/en' : '/us/en';
   return `${base}/magazine/query-index.json`;
+}
+
+/**
+ * Resolve an authored index path (dev-aware): absolute URLs pass through;
+ * root-absolute paths get the /content prefix on local dev.
+ */
+function resolveIndexPath(raw) {
+  if (!raw) return defaultIndexPath();
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const prefix = window.location.pathname.startsWith('/content/') && raw.startsWith('/') ? '/content' : '';
+  return `${prefix}${raw}`;
 }
 
 /**
@@ -18,10 +29,9 @@ function withPrefix(path) {
 }
 
 /**
- * Fetch the published query index (cached across blocks on the page).
+ * Fetch a published query index, cached per-path across blocks on the page.
  */
-async function loadIndex() {
-  const path = getIndexPath();
+async function loadIndex(path) {
   window.wkndIndexCache = window.wkndIndexCache || {};
   if (!window.wkndIndexCache[path]) {
     window.wkndIndexCache[path] = fetch(path)
@@ -75,17 +85,28 @@ function buildCard(item) {
  *
  * Reproduces the source's dynamic "All Articles" grid: queries the published
  * index for magazine article pages and renders a card grid. New articles appear
- * automatically once indexed — no re-authoring of this page needed. An optional
- * heading can be authored in the block's first cell; it is rendered above the grid.
+ * automatically once indexed. Authoring (each is its own block row):
+ *   - an optional heading (e.g. "All Articles"), rendered above the grid, and
+ *   - an optional index path (a cell containing a ".json" path, e.g.
+ *     "/us/en/magazine/query-index.json"), matching the adventures-listing
+ *     config-cell pattern. If omitted, the default magazine index is used.
  *
  * @param {Element} block The block element
  */
 export default async function decorate(block) {
-  // An optional single-cell heading (e.g. "All Articles") may be authored.
-  const authoredHeading = block.textContent.trim();
+  // Read the authored rows: a cell containing a ".json" path is the index
+  // source; any other non-empty cell text is treated as the heading.
+  let authoredHeading = '';
+  let authoredPath = '';
+  [...block.children].forEach((row) => {
+    const text = (row.textContent || '').trim();
+    if (!text) return;
+    if (/\.json(\?|$)/i.test(text)) authoredPath = text;
+    else if (!authoredHeading) authoredHeading = text;
+  });
   block.textContent = '';
 
-  const data = await loadIndex();
+  const data = await loadIndex(resolveIndexPath(authoredPath));
   // Magazine article pages: under /us/en/magazine/ but not the listing itself.
   const articles = data
     .filter((item) => /\/us\/en\/magazine\/[^/]+$/.test(item.path))

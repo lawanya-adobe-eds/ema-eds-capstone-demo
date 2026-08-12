@@ -66,8 +66,11 @@ function getIndexPath() {
 }
 
 /**
- * Detect dynamic mode: a single cell whose text is "dynamic", or a link/path to
- * a `.json` index. Returns the index URL to fetch, or null for authored mode.
+ * Detect dynamic mode from the block's single config cell. Accepts either:
+ *  - an explicit index path, e.g. "/us/en/faqs/faq-index.json" (recommended;
+ *    authored the same way as the adventures-listing block), or
+ *  - the keyword "dynamic" (back-compat) → the default FAQ index.
+ * Returns the index URL to fetch (dev-aware), or null for authored rows mode.
  */
 function getDynamicSource(block) {
   if (block.children.length !== 1) return null;
@@ -77,11 +80,11 @@ function getDynamicSource(block) {
   const raw = (link ? link.getAttribute('href') : cell.textContent).trim();
   if (/^dynamic$/i.test(raw)) return getIndexPath();
   if (/\.json(\?|$)/i.test(raw)) {
-    try {
-      return new URL(raw, window.location).href;
-    } catch (e) {
-      return null;
-    }
+    if (/^https?:\/\//i.test(raw)) return raw;
+    // Root-absolute path (e.g. /us/en/faqs/faq-index.json): prefix /content on
+    // local dev so it resolves under the preview mount.
+    const prefix = window.location.pathname.startsWith('/content/') && raw.startsWith('/') ? '/content' : '';
+    return `${prefix}${raw}`;
   }
   return null;
 }

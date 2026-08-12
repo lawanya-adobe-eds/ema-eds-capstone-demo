@@ -73,16 +73,39 @@ function getIndexPath() {
 }
 
 /**
- * Detect dynamic mode: a single cell reading "dynamic <group>" (e.g.
- * "dynamic contributors"). Returns the group name, or null for authored mode.
+ * Detect dynamic mode from the block's single config cell. Two authored forms,
+ * both carrying the required group (which grid: contributors vs guides):
+ *  - explicit path + group: "/us/en/about-us/people-index.json | contributors"
+ *    (recommended; the index path is authored like the adventures-listing block,
+ *    with the group after a pipe or space), or
+ *  - keyword form: "dynamic contributors" (back-compat) → the default index.
+ * Returns { path, group } (path dev-aware), or null for authored rows mode.
  */
-function getDynamicGroup(block) {
+function getDynamicConfig(block) {
   if (block.children.length !== 1) return null;
   const cell = block.querySelector(':scope > div > div');
   if (!cell) return null;
-  const text = cell.textContent.trim();
-  const m = /^dynamic\s+(\S+)/i.exec(text);
-  return m ? m[1].toLowerCase() : null;
+  const raw = cell.textContent.trim();
+
+  // Split on a pipe if present, else on whitespace, into [first, group].
+  const parts = raw.includes('|') ? raw.split('|') : raw.split(/\s+/);
+  const first = (parts[0] || '').trim();
+  const group = (parts[1] || '').trim().toLowerCase();
+  if (!group) return null;
+
+  let path;
+  if (/^dynamic$/i.test(first)) {
+    path = getIndexPath();
+  } else if (/\.json(\?|$)/i.test(first)) {
+    if (/^https?:\/\//i.test(first)) path = first;
+    else {
+      const prefix = window.location.pathname.startsWith('/content/') && first.startsWith('/') ? '/content' : '';
+      path = `${prefix}${first}`;
+    }
+  } else {
+    return null;
+  }
+  return { path, group };
 }
 
 /** Build one person card <li> from an index row. */
@@ -149,15 +172,16 @@ function renderFromIndex(block, rows, group) {
  * @param {Element} block The cards-people block element
  */
 export default async function decorate(block) {
-  const group = getDynamicGroup(block);
+  const config = getDynamicConfig(block);
 
-  if (!group) {
+  if (!config) {
     decorateAuthored(block);
     return;
   }
 
+  const { path, group } = config;
   try {
-    const res = await fetch(getIndexPath());
+    const res = await fetch(path);
     const json = res.ok ? await res.json() : null;
     const rows = json && Array.isArray(json.data) ? json.data : [];
     if (rows.some((r) => r.group === group)) {
