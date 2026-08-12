@@ -3,40 +3,30 @@
 # them into a single /sitemap.xml. Each `source` is one published query index;
 # they share the same `destination` so their URLs merge into one sitemap.
 #
-# This lists the 40 real content pages (home + section landings + all detail /
-# sub-pages) and intentionally drops the block-library demo pages, /nav, and
-# /footer that the previous auto-generated sitemap included.
-#
-# `origin` sets the host used in each <loc> (must include protocol). It is set
-# on the sitemap entry AND on each language so the host resolves regardless of
-# which level the generator reads.
+# Structure matches the aem.live sitemap docs exactly: `origin` (with protocol)
+# at the sitemap-entry level sets the host for every <loc>; each language names
+# a source index and the shared destination.
 sitemaps:
   default:
     origin: https://main--ema-eds-capstone-demo--lawanya-adobe-eds.aem.live
-    destination: /sitemap.xml
     languages:
       pages:
-        origin: https://main--ema-eds-capstone-demo--lawanya-adobe-eds.aem.live
         source: /us/en/pages-index.json
         destination: /sitemap.xml
         hreflang: en-US
       adventures:
-        origin: https://main--ema-eds-capstone-demo--lawanya-adobe-eds.aem.live
         source: /us/en/adventures/query-index.json
         destination: /sitemap.xml
         hreflang: en-US
       magazine:
-        origin: https://main--ema-eds-capstone-demo--lawanya-adobe-eds.aem.live
         source: /us/en/magazine/query-index.json
         destination: /sitemap.xml
         hreflang: en-US
       faqs:
-        origin: https://main--ema-eds-capstone-demo--lawanya-adobe-eds.aem.live
         source: /us/en/faqs/faq-index.json
         destination: /sitemap.xml
         hreflang: en-US
       about:
-        origin: https://main--ema-eds-capstone-demo--lawanya-adobe-eds.aem.live
         source: /us/en/about-us/people-index.json
         destination: /sitemap.xml
         hreflang: en-US
