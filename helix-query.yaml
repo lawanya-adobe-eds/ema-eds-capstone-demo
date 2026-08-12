@@ -1,11 +1,17 @@
 version: 1
 
 indices:
-  # Full-site content index used by the header search live-suggest dropdown.
-  default:
+  # Per-section content indices. The site-wide `default` index was split into
+  # folder-scoped indices so each listing/dynamic block fetches only its own
+  # section's rows (smaller, faster) and can be authored with an explicit index
+  # path. The sitemap (helix-sitemap.yaml) aggregates these back together.
+
+  # Adventure detail pages — feeds the adventures-listing grid + filter tabs and
+  # the homepage "Where do you want to go?" (recent-adventures) grid.
+  adventures:
     include:
-      - '/us/en/**'
-    target: /us/en/query-index.json
+      - '/us/en/adventures/**'
+    target: /us/en/adventures/query-index.json
     properties:
       title:
         select: head > meta[property="og:title"]
@@ -21,19 +27,63 @@ indices:
           match(attribute(el, 'content'), 'https:\/\/[^"]*')
       category:
         # Adventure pages expose their category as the first spec pair
-        # (label "Activity", value e.g. "Surfing"). The value is the second
-        # cell of the first row of the specs block. Non-adventure pages have no
-        # specs block, so this resolves to empty — which the listing blocks
-        # simply ignore.
+        # (label "Activity", value e.g. "Surfing"). Drives the filter tabs.
         select: main .specs > div:first-child > div:last-child
         value: |
           textContent(el)
+      lastModified:
+        select: none
+        value: |
+          parseTimestamp(headers('last-modified'), 'ddd, DD MMM YYYY hh:mm:ss GMT')
+
+  # Magazine article pages — feeds the magazine-listing grid, the homepage
+  # "Recent Articles" (recent-articles) grid, and the article-sidebar
+  # "Share this story" (related-articles) list.
+  magazine:
+    include:
+      - '/us/en/magazine/**'
+    target: /us/en/magazine/query-index.json
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: |
+          attribute(el, 'content')
+      description:
+        select: head > meta[name="description"]
+        value: |
+          attribute(el, 'content')
+      image:
+        select: head > meta[property="og:image"]
+        value: |
+          match(attribute(el, 'content'), 'https:\/\/[^"]*')
       publishDate:
-        # Magazine articles carry an editorial publish date as a `publish-date`
-        # meta tag (ISO YYYY-MM-DD, authored in the page metadata). The dynamic
-        # related-articles block formats it as "Weekday, D Mon YYYY" and sorts
-        # newest-first. Pages without the meta resolve to empty.
+        # Editorial publish date (ISO YYYY-MM-DD) authored as a meta tag; the
+        # related-articles block sorts newest-first on it.
         select: head > meta[name="publish-date"]
+        value: |
+          attribute(el, 'content')
+      lastModified:
+        select: none
+        value: |
+          parseTimestamp(headers('last-modified'), 'ddd, DD MMM YYYY hh:mm:ss GMT')
+
+  # Top-level pages (home + the section landing pages) — no other index covers
+  # these, so this keeps them in the sitemap after the site-wide index removal.
+  pages:
+    include:
+      - '/us/en'
+      - '/us/en/adventures'
+      - '/us/en/magazine'
+      - '/us/en/faqs'
+      - '/us/en/about-us'
+    target: /us/en/pages-index.json
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: |
+          attribute(el, 'content')
+      description:
+        select: head > meta[name="description"]
         value: |
           attribute(el, 'content')
       lastModified:
@@ -46,9 +96,9 @@ indices:
   # in-body hits (e.g. "share" appears in each article's "Share this Story"
   # section). This index adds a `content` field (the main body text) so the
   # header live-suggest matches full text like the source. It is a SEPARATE
-  # target so the default index the homepage/listing blocks fetch stays lean —
-  # the body text only ships in this file, which the header fetches on demand
-  # (first keystroke), never blocking render (protects Core Web Vitals).
+  # target so the section indices the blocks fetch stay lean — the body text
+  # only ships in this file, which the header fetches on demand (first
+  # keystroke), never blocking render (protects Core Web Vitals).
   search:
     include:
       - '/us/en/**'
