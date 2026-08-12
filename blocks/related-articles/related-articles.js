@@ -5,7 +5,7 @@
  * The source hardcodes a per-article list of links to other magazine articles
  * (title + editorial date). That list was stale and duplicated across pages
  * (some articles even linked to themselves). This block instead fetches the
- * published query index (/us/en/query-index.json), takes the most recent
+ * published magazine index (/us/en/magazine/query-index.json), takes the most recent
  * magazine articles, EXCLUDES the current page, caps the count, and renders the
  * same title-over-date list the source shows.
  *
@@ -27,10 +27,10 @@
 // How many related stories to show (matches the source's list length).
 const LIMIT = 4;
 
-/** Resolve the query-index path for both local dev (/content) and production. */
+/** Resolve the magazine section index path (dev-aware). */
 function getIndexPath() {
   const base = window.location.pathname.startsWith('/content/') ? '/content/us/en' : '/us/en';
-  return `${base}/query-index.json`;
+  return `${base}/magazine/query-index.json`;
 }
 
 /** Prefix internal paths for local dev (content served under /content). */
@@ -39,15 +39,17 @@ function withPrefix(path) {
   return `${prefix}${path}`;
 }
 
-/** Fetch the published query index (cached across blocks on the page). */
+/** Fetch a published query index, cached per-path across blocks on the page. */
 async function loadIndex() {
-  if (!window.wkndQueryIndex) {
-    window.wkndQueryIndex = fetch(getIndexPath())
+  const path = getIndexPath();
+  window.wkndIndexCache = window.wkndIndexCache || {};
+  if (!window.wkndIndexCache[path]) {
+    window.wkndIndexCache[path] = fetch(path)
       .then((res) => (res.ok ? res.json() : { data: [] }))
       .then((json) => json.data || [])
       .catch(() => []);
   }
-  return window.wkndQueryIndex;
+  return window.wkndIndexCache[path];
 }
 
 /**

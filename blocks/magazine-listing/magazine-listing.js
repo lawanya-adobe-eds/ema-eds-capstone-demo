@@ -1,11 +1,12 @@
 import { toClassName, createOptimizedPicture } from '../../scripts/aem.js';
 
 /**
- * Resolve the query-index path for both local dev (/content) and production.
+ * Resolve the magazine section index path (dev-aware). The site-wide index was
+ * split per section, so this reads the scoped magazine index.
  */
 function getIndexPath() {
   const base = window.location.pathname.startsWith('/content/') ? '/content/us/en' : '/us/en';
-  return `${base}/query-index.json`;
+  return `${base}/magazine/query-index.json`;
 }
 
 /**
@@ -20,13 +21,15 @@ function withPrefix(path) {
  * Fetch the published query index (cached across blocks on the page).
  */
 async function loadIndex() {
-  if (!window.wkndQueryIndex) {
-    window.wkndQueryIndex = fetch(getIndexPath())
+  const path = getIndexPath();
+  window.wkndIndexCache = window.wkndIndexCache || {};
+  if (!window.wkndIndexCache[path]) {
+    window.wkndIndexCache[path] = fetch(path)
       .then((res) => (res.ok ? res.json() : { data: [] }))
       .then((json) => json.data || [])
       .catch(() => []);
   }
-  return window.wkndQueryIndex;
+  return window.wkndIndexCache[path];
 }
 
 /**

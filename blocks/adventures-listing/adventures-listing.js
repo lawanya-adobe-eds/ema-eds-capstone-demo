@@ -20,11 +20,27 @@ function tabLabel(category) {
 }
 
 /**
- * Resolve the query-index path for both local dev (/content) and production.
+ * Default section index (adventures). Used when the block has no config cell.
  */
-function getIndexPath() {
+function defaultIndexPath() {
   const base = window.location.pathname.startsWith('/content/') ? '/content/us/en' : '/us/en';
-  return `${base}/query-index.json`;
+  return `${base}/adventures/query-index.json`;
+}
+
+/**
+ * Resolve the query-index path from the block's authored config cell (the
+ * "Adventure Filter" row: a single cell holding the index path, e.g.
+ * /us/en/adventures/query-index.json). Falls back to the default section index
+ * when no cell is authored. On local dev (/content) a site-absolute path is
+ * prefixed so it resolves under the preview mount.
+ */
+function getIndexPath(block) {
+  const cell = block.querySelector(':scope > div > div');
+  const raw = cell ? cell.textContent.trim() : '';
+  if (!raw) return defaultIndexPath();
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const prefix = window.location.pathname.startsWith('/content/') && raw.startsWith('/') ? '/content' : '';
+  return `${prefix}${raw}`;
 }
 
 /**
@@ -36,16 +52,18 @@ function withPrefix(path) {
 }
 
 /**
- * Fetch the published query index (cached across blocks on the page).
+ * Fetch a published query index, cached per-path across blocks on the page so
+ * multiple blocks sharing an index only fetch it once.
  */
-async function loadIndex() {
-  if (!window.wkndQueryIndex) {
-    window.wkndQueryIndex = fetch(getIndexPath())
+async function loadIndex(path) {
+  window.wkndIndexCache = window.wkndIndexCache || {};
+  if (!window.wkndIndexCache[path]) {
+    window.wkndIndexCache[path] = fetch(path)
       .then((res) => (res.ok ? res.json() : { data: [] }))
       .then((json) => json.data || [])
       .catch(() => []);
   }
-  return window.wkndQueryIndex;
+  return window.wkndIndexCache[path];
 }
 
 /**
@@ -106,10 +124,14 @@ function buildCardList(items) {
  * @param {Element} block The block element
  */
 export default async function decorate(block) {
+  // Read the authored index path from the config cell BEFORE clearing the block.
+  const indexPath = getIndexPath(block);
   block.textContent = '';
 
-  const data = await loadIndex();
+  const data = await loadIndex(indexPath);
   // Adventure detail pages: under /us/en/adventures/ but not the listing itself.
+  // (The adventures index is already scoped to /us/en/adventures/**, so this
+  // regex only needs to drop the section landing page.)
   const adventures = data
     .filter((item) => /\/us\/en\/adventures\/[^/]+$/.test(item.path))
     .sort((a, b) => (a.title || '').localeCompare(b.title || ''));

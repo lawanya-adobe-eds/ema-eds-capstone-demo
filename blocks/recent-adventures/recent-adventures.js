@@ -4,7 +4,7 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
  * recent-adventures — the homepage "Where do you want to go?" grid, made dynamic.
  *
  * Mirrors the recent-articles block, but for adventure detail pages: it fetches
- * the published query index (/us/en/query-index.json) and renders a capped set
+ * the published adventures index (/us/en/adventures/query-index.json) and renders a capped set
  * of adventure cards. New adventure pages appear automatically once indexed — no
  * re-authoring of the homepage needed. Visual design matches the wknd.site source
  * grid (the same image-list component as Recent Articles): 260x200 image tiles, a
@@ -17,7 +17,7 @@ const LIMIT = 4;
 /** Resolve the query-index path for both local dev (/content) and production. */
 function getIndexPath() {
   const base = window.location.pathname.startsWith('/content/') ? '/content/us/en' : '/us/en';
-  return `${base}/query-index.json`;
+  return `${base}/adventures/query-index.json`;
 }
 
 /** Prefix internal paths for local dev (content served under /content). */
@@ -28,13 +28,15 @@ function withPrefix(path) {
 
 /** Fetch the published query index (cached across blocks on the page). */
 async function loadIndex() {
-  if (!window.wkndQueryIndex) {
-    window.wkndQueryIndex = fetch(getIndexPath())
+  const path = getIndexPath();
+  window.wkndIndexCache = window.wkndIndexCache || {};
+  if (!window.wkndIndexCache[path]) {
+    window.wkndIndexCache[path] = fetch(path)
       .then((res) => (res.ok ? res.json() : { data: [] }))
       .then((json) => json.data || [])
       .catch(() => []);
   }
-  return window.wkndQueryIndex;
+  return window.wkndIndexCache[path];
 }
 
 /** Build a single adventure card (<li>) from an index entry. */
