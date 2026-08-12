@@ -14,10 +14,25 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
 // How many cards the homepage shows (matches the source's curated count).
 const LIMIT = 4;
 
-/** Resolve the query-index path for both local dev (/content) and production. */
-function getIndexPath() {
+/** Default adventures section index path (dev-aware), used when no cell authored. */
+function defaultIndexPath() {
   const base = window.location.pathname.startsWith('/content/') ? '/content/us/en' : '/us/en';
   return `${base}/adventures/query-index.json`;
+}
+
+/**
+ * Resolve the index path from the block's authored config cell (a cell holding
+ * the index path, e.g. /us/en/adventures/query-index.json), matching the
+ * adventures-listing pattern. Falls back to the default adventures section index
+ * when no cell is authored. Dev-aware (/content prefix for root-absolute paths).
+ */
+function getIndexPath(block) {
+  const cell = block.querySelector(':scope > div > div');
+  const raw = cell ? cell.textContent.trim() : '';
+  if (!raw) return defaultIndexPath();
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const prefix = window.location.pathname.startsWith('/content/') && raw.startsWith('/') ? '/content' : '';
+  return `${prefix}${raw}`;
 }
 
 /** Prefix internal paths for local dev (content served under /content). */
@@ -26,9 +41,8 @@ function withPrefix(path) {
   return `${prefix}${path}`;
 }
 
-/** Fetch the published query index (cached across blocks on the page). */
-async function loadIndex() {
-  const path = getIndexPath();
+/** Fetch a published query index, cached per-path across blocks on the page. */
+async function loadIndex(path) {
   window.wkndIndexCache = window.wkndIndexCache || {};
   if (!window.wkndIndexCache[path]) {
     window.wkndIndexCache[path] = fetch(path)
@@ -80,9 +94,11 @@ function buildCard(item) {
  * @param {Element} block The block element
  */
 export default async function decorate(block) {
+  // Read the authored index path from the config cell BEFORE clearing the block.
+  const indexPath = getIndexPath(block);
   block.textContent = '';
 
-  const data = await loadIndex();
+  const data = await loadIndex(indexPath);
   // Adventure detail pages: under /us/en/adventures/ but not the listing itself.
   const adventures = data
     .filter((item) => /\/us\/en\/adventures\/[^/]+$/.test(item.path))
