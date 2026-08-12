@@ -199,9 +199,19 @@ faster, and authorable): `adventures/query-index.json`, `magazine/query-index.js
 `faqs/faq-index.json`, `about-us/people-index.json`, the header's
 `search-index.json`, and a small top-level `pages-index.json`. Blocks use a
 per-path cache so a page loading two different indices (e.g. the homepage's
-article + adventure grids) never collide. The Adventures listing takes its index
-path from an authored config cell (`/us/en/adventures/query-index.json`), so the
-source is editable without code changes:
+article + adventure grids) never collide. **The index path is authored in a
+config cell** on every page-level dynamic block, so the source is visible/editable
+in the page without code changes:
+- `adventures-listing` (Adventures) — cell: `/us/en/adventures/query-index.json`
+- `magazine-listing` (Magazine) — an authored row with the `.json` path
+  (`/us/en/magazine/query-index.json`); the "All Articles" heading row is separate
+- `accordion-faq` (FAQs) — cell: `/us/en/faqs/faq-index.json`
+- `cards-people` (About Us) — cell: `<path> | <group>`, e.g.
+  `/us/en/about-us/people-index.json | contributors` and `| guides`
+
+Each block keeps a fallback (default section index / legacy `dynamic` keyword) so
+it degrades gracefully. `pages-index.json` (sitemap-only) and `search-index.json`
+(global header) aren't page blocks, so they have no config-cell authoring:
 
 1. **Query-index-driven listings** — The Adventures and Magazine listing pages
    render their card grids from the index. Adventure category (Activity spec) is
