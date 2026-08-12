@@ -208,6 +208,9 @@ in the page without code changes:
 - `accordion-faq` (FAQs) — cell: `/us/en/faqs/faq-index.json`
 - `cards-people` (About Us) — cell: `<path> | <group>`, e.g.
   `/us/en/about-us/people-index.json | contributors` and `| guides`
+- `related-articles` (each magazine article's "Share this story" sidebar) — a
+  cell with the `.json` path (`/us/en/magazine/query-index.json`); the preceding
+  "Share this story" `<h5>` is unchanged. Applied to all 5 article pages.
 
 Each block keeps a fallback (default section index / legacy `dynamic` keyword) so
 it degrades gracefully. `pages-index.json` (sitemap-only) and `search-index.json`
