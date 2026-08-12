@@ -8,6 +8,7 @@
 # /footer that the previous auto-generated sitemap included.
 sitemaps:
   default:
+    origin: https://main--ema-eds-capstone-demo--lawanya-adobe-eds.aem.live
     destination: /sitemap.xml
     languages:
       pages:
